@@ -21,20 +21,12 @@ class CaptureRequest extends AbstractRequest
     }
 
     /**
-     * @param string $value
-     * @return CaptureRequest
+     * @param $data
+     * @return CaptureResponse
      */
-    public function setUserId(string $value): CaptureRequest
+    protected function createResponse($data): CaptureResponse
     {
-        return $this->setParameter('userId', $value);
-    }
-
-    /**
-     * @return string
-     */
-    public function getUserId(): string
-    {
-        return $this->getParameter('userId');
+        return new CaptureResponse($this, $data);
     }
 }
 

@@ -16,28 +16,16 @@ class AuthorizeRequest extends AbstractRequest
      */
     public function getData(): array
     {
-        $data = $this->getSalesRequestParams();
-        $data['Transaction']['Type'] = 'preauth';
-
-        return $data;
-
+        return $data = $this->getAuthorizeRequestParams();
     }
 
     /**
-     * @param string $value
-     * @return AuthorizeRequest
+     * @param $data
+     * @return AuthorizeResponse
      */
-    public function setUserId(string $value): AuthorizeRequest
+    protected function createResponse($data): AuthorizeResponse
     {
-        return $this->setParameter('userId', $value);
-    }
-
-    /**
-     * @return string
-     */
-    public function getUserId(): string
-    {
-        return $this->getParameter('userId');
+        return new AuthorizeResponse($this, $data);
     }
 }
 

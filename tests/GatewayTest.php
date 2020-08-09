@@ -28,6 +28,24 @@ class GatewayTest extends GatewayTestCase
     }
 
 
+    public function testAuthorize()
+    {
+        $this->options = [
+            'card' => $this->getCardInfo(),
+            'orderId' => '8443343542',
+            'username' => 'PROVAUT',
+            'password' => '123qweASD',
+            'amount' => "1",
+            'currency' => 'TRY',
+            'installment' => "1",
+            'paymentType' => ''
+        ];
+
+        /** @var AuthorizeResponse $response */
+        $response = $this->gateway->authorize($this->options)->send();
+        $this->assertTrue($response->isSuccessful());
+    }
+
     public function testCompletePurchase()
     {
         $this->options = [
@@ -70,28 +88,17 @@ class GatewayTest extends GatewayTestCase
     }
 
 
-    public function testAuthorize()
-    {
-        $this->options = [
-            'card' => $this->getCardInfo(),
-            'orderid' => '8443343542',
-            'transactionId' => 'credit_card',
-            'amount' => "1",
-            'currency' => '000'
-        ];
-
-        /** @var AuthorizeResponse $response */
-        $response = $this->gateway->authorize($this->options)->send();
-        $this->assertTrue($response->isSuccessful());
-    }
-
     public function testCapture()
     {
         $this->options = [
             'card' => $this->getCardInfo(),
-            'transactionId' => 'credit_card',
+            'orderId' => '8443343542',
+            'username' => 'PROVAUT',
+            'password' => '123qweASD',
             'amount' => "1",
-            'currency' => '000'
+            'currency' => 'TRY',
+            'installment' => "1",
+            'paymentType' => ''
         ];
 
         /** @var CaptureResponse $response */

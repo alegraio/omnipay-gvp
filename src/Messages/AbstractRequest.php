@@ -298,7 +298,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
             'ProvUserID' => $this->getUserName(),
             'HashData' => $this->getTransactionHash(),
             'UserID' => $this->getUserName(),
-            'ID' => $this->getTerminalId(),
+            'ID' => str_repeat('0', 9 - strlen($this->getTerminalId())),
             'MerchantID' => $this->getMerchantId()
         ];
 
@@ -323,6 +323,44 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
     /**
      * @return array
+     */
+    protected function getAuthorizeRequestParams(): array
+    {
+        $data['Version'] = $this->version;
+        $data['Mode'] = $this->getTestMode() ? 'TEST' : 'PROD';
+        $data['Terminal'] = [
+            'ProvUserID' => $this->getUserName(),
+            'HashData' => $this->getTransactionHash(),
+            'UserID' => $this->getUserName(),
+            'ID' => str_repeat('0', 9 - strlen($this->getTerminalId())),
+            'MerchantID' => $this->getMerchantId()
+        ];
+        $data['Customer'] = array(
+            'IPAddress' => $this->getClientIp(),
+            'EmailAddress' => $this->getCard()->getEmail()
+        );
+        $data['Card'] = array(
+            'Number' => $this->getCard()->getNumber(),
+            'ExpireDate' => $this->getCard()->getExpiryDate('my')
+        );
+        $data['Order'] = array(
+            'OrderID' => $this->getOrderId(),
+            'GroupID' => ""
+        );
+        $data['Transaction'] = array(
+            'Type' => 'preauth',
+            'InstallmentCnt' => $this->getInstallment(),
+            'Amount' => $this->getAmountInteger(),
+            'CurrencyCode' => $this->currency_list[$this->getCurrency()],
+            'CardholderPresentCode' => "0",
+            'MotoInd' => "H"
+        );
+
+        return $data;
+    }
+
+    /**
+     * @return array
      * @throws \Omnipay\Common\Exception\InvalidRequestException
      */
     protected function getSalesRequestParamsFor3d(): array
@@ -331,8 +369,8 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         $params['apiversion'] = $this->version;
         $params['mode'] = $this->getTestMode();
         $params['terminalprovuserid'] = $this->getUserName();
-        $params['terminaluserid'] = $this->getTerminalId();
-        $params['terminalid'] = $this->getTerminalId();
+        $params['terminaluserid'] = str_repeat('0', 9 - strlen($this->getTerminalId()));
+        $params['terminalid'] = str_repeat('0', 9 - strlen($this->getTerminalId()));
         $params['terminalmerchantid'] = $this->getMerchantId();
         $params['orderid'] = $this->getOrderId();
         $params['customeremailaddress'] = $this->getCard()->getEmail();
