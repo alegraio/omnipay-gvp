@@ -37,7 +37,7 @@ class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse
      */
     public function isSuccessful(): bool
     {
-        return isset($this->data["Transaction"]) ? $this->data["Transaction"]->Response->Code === '00' : false;
+        return isset($this->data["Transaction"]) ? $this->data["Transaction"]->Response->Code == '00' : false;
     }
 
     /**
