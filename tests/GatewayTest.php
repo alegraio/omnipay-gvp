@@ -23,7 +23,7 @@ class GatewayTest extends GatewayTestCase
         /** @var Gateway gateway */
         $this->gateway = new Gateway(null, $this->getHttpRequest());
         $this->gateway->setMerchantId('7000679');
-        $this->gateway->setTerminalId('030691297');
+        $this->gateway->setTerminalId('30691297');
         $this->gateway->setTestMode(true);
     }
 
@@ -32,17 +32,57 @@ class GatewayTest extends GatewayTestCase
     {
         $this->options = [
             'card' => $this->getCardInfo(),
-            'orderId' => '8443343542',
+            'orderId' => '10082020_114109',
             'username' => 'PROVAUT',
-            'password' => '123qweASD',
+            'password' => '123qweASD/',
             'amount' => "1",
             'currency' => 'TRY',
-            'installment' => "1",
-            'paymentType' => ''
+            'installment' => "",
+            'clientIp' => '10.241.19.2'
         ];
 
         /** @var AuthorizeResponse $response */
         $response = $this->gateway->authorize($this->options)->send();
+        $this->assertTrue($response->isSuccessful());
+    }
+
+    public function testCapture()
+    {
+        $this->options = [
+            'card' => $this->getCardInfo(),
+            'orderId' => '10082020_1141',
+            'username' => 'PROVAUT',
+            'password' => '123qweASD/',
+            'amount' => "1",
+            'currency' => 'TRY',
+            'installment' => "",
+            'clientIp' => '10.241.19.2'
+        ];
+
+        /** @var CaptureResponse $response */
+        $response = $this->gateway->capture($this->options)->send();
+        $this->assertTrue($response->isSuccessful());
+    }
+
+    public function testPurchase()
+    {
+        $this->options = [
+            'card' => $this->getCardInfo(),
+            'orderId' => '10082020_114108',
+            'username' => 'PROVAUT',
+            'password' => '123qweASD/',
+            'amount' => "100",
+            'currency' => 'TRY',
+            'returnUrl' => "www.backref.com.tr",
+            'cancelUrl' => "www.backref.com.tr",
+            'installment' => "",
+            'paymentType' => '',
+            'clientIp' => '10.241.19.2'
+        ];
+
+        /** @var PurchaseResponse $response */
+        $response = $this->gateway->purchase($this->options)->send();
+
         $this->assertTrue($response->isSuccessful());
     }
 
@@ -68,56 +108,18 @@ class GatewayTest extends GatewayTestCase
         $this->assertTrue($response->isSuccessful());
     }
 
-    public function testPurchase()
-    {
-        $this->options = [
-            'card' => $this->getCardInfo(),
-            'orderId' => '8443343542',
-            'username' => 'PROVAUT',
-            'password' => '123qweASD',
-            'amount' => "1",
-            'currency' => 'TRY',
-            'returnUrl' => "www.backref.com.tr",
-            'cancelUrl' => "www.backref.com.tr",
-            'installment' => "1"
-        ];
-
-        /** @var PurchaseResponse $response */
-        $response = $this->gateway->purchase($this->options)->send();
-        $this->assertTrue($response->isSuccessful());
-    }
-
-
-    public function testCapture()
-    {
-        $this->options = [
-            'card' => $this->getCardInfo(),
-            'orderId' => '8443343542',
-            'username' => 'PROVAUT',
-            'password' => '123qweASD',
-            'amount' => "1",
-            'currency' => 'TRY',
-            'installment' => "1",
-            'paymentType' => ''
-        ];
-
-        /** @var CaptureResponse $response */
-        $response = $this->gateway->capture($this->options)->send();
-        $this->assertTrue($response->isSuccessful());
-    }
-
     /**
      * @return CreditCard
      */
     private function getCardInfo(): CreditCard
     {
         $cardInfo = $this->getValidCard();
-        $cardInfo['number'] = '5406675406675403';
-        $cardInfo['expiryMonth'] = "12";
-        $cardInfo['expiryYear'] = "2015";
-        $cardInfo['cvv'] = "000";
+        $cardInfo['number'] = '5549608789641500';
+        $cardInfo['expiryMonth'] = "03";
+        $cardInfo['expiryYear'] = "2023";
+        $cardInfo['cvv'] = "712";
         $card = new CreditCard($cardInfo);
-        $card->setEmail("mail@mail.com");
+        $card->setEmail("emrez@garanti.com.tr");
         $card->setFirstName('Test name');
         $card->setLastName('Test lastname');
 

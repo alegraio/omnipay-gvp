@@ -16,7 +16,8 @@ class AuthorizeRequest extends AbstractRequest
      */
     public function getData(): array
     {
-        return $data = $this->getAuthorizeRequestParams();
+        $this->setPaymentType();
+        return $this->getAuthorizeRequestParams();
     }
 
     /**

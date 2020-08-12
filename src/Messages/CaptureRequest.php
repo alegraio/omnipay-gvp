@@ -14,8 +14,10 @@ class CaptureRequest extends AbstractRequest
      */
     public function getData(): array
     {
-        $data = $this->getSalesRequestParams();
+        $this->setPaymentType();
+        $data = $this->getAuthorizeRequestParams();
         $data['Transaction']['Type'] = 'postauth';
+        $data['Card']['CVV2'] = $this->getCard()->getCvv();
 
         return $data;
     }

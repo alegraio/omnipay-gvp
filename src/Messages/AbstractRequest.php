@@ -11,7 +11,7 @@ use Omnipay\Common\Message\ResponseInterface;
 abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 {
     /** @var string */
-    protected $version = 'v1.0';
+    protected $version = 'v0.01';
 
     /** @var array */
     protected $endpoints = [
@@ -115,6 +115,24 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     }
 
     /**
+     * @return string
+     */
+    public function getPaymentType(): string
+    {
+        return $this->getParameter('paymentType');
+    }
+
+    /**
+     * @param string $value
+     * @return AbstractRequest
+     */
+    public function setPaymentType(string $value = ""): AbstractRequest
+    {
+        return $this->setParameter('paymentType', $value);
+    }
+
+
+    /**
      * @param mixed $data
      * @return ResponseInterface|AbstractResponse
      * @throws InvalidResponseException
@@ -166,23 +184,6 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     public function setOrderId(string $value): AbstractRequest
     {
         return $this->setParameter('orderId', $value);
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getPaymentType(): string
-    {
-        return $this->getParameter('paymentType') ?? null;
-    }
-
-    /**
-     * @param string $value
-     * @return AbstractRequest
-     */
-    public function setPaymentType(string $value): AbstractRequest
-    {
-        return $this->setParameter('paymentType', $value);
     }
 
     /**
@@ -285,8 +286,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         );
 
         $data['Order'] = array(
-            'OrderID' => $this->getOrderId(),
-            'GroupID' => ""
+            'OrderID' => $this->getOrderId()
         );
 
         $data['Customer'] = array(
@@ -297,8 +297,8 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         $data['Terminal'] = [
             'ProvUserID' => $this->getUserName(),
             'HashData' => $this->getTransactionHash(),
-            'UserID' => $this->getUserName(),
-            'ID' => str_repeat('0', 9 - strlen($this->getTerminalId())),
+            'UserID' => 'PROVAUT',
+            'ID' => $this->getTerminalId(),
             'MerchantID' => $this->getMerchantId()
         ];
 
@@ -308,14 +308,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
             'Amount' => $this->getAmountInteger(),
             'CurrencyCode' => $this->currency_list[$this->getCurrency()],
             'CardholderPresentCode' => "0",
-            'MotoInd' => "N",
-            'Description' => "",
-            'OriginalRetrefNum' => $this->getTransactionId(),
-            'CepBank' => array(
-                'GSMNumber' => $this->getCard()->getBillingPhone(),
-                'CepBank' => ""
-            ),
-            'PaymentType' => "K"
+            'MotoInd' => "N"
         );
 
         return $data;
@@ -332,7 +325,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
             'ProvUserID' => $this->getUserName(),
             'HashData' => $this->getTransactionHash(),
             'UserID' => $this->getUserName(),
-            'ID' => str_repeat('0', 9 - strlen($this->getTerminalId())),
+            'ID' => $this->getTerminalId(),
             'MerchantID' => $this->getMerchantId()
         ];
         $data['Customer'] = array(
@@ -344,8 +337,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
             'ExpireDate' => $this->getCard()->getExpiryDate('my')
         );
         $data['Order'] = array(
-            'OrderID' => $this->getOrderId(),
-            'GroupID' => ""
+            'OrderID' => $this->getOrderId()
         );
         $data['Transaction'] = array(
             'Type' => 'preauth',
@@ -353,7 +345,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
             'Amount' => $this->getAmountInteger(),
             'CurrencyCode' => $this->currency_list[$this->getCurrency()],
             'CardholderPresentCode' => "0",
-            'MotoInd' => "H"
+            'MotoInd' => "N"
         );
 
         return $data;
@@ -365,7 +357,6 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
      */
     protected function getSalesRequestParamsFor3d(): array
     {
-        $params['apiversion'] = $this->version;
         $params['apiversion'] = $this->version;
         $params['mode'] = $this->getTestMode();
         $params['terminalprovuserid'] = $this->getUserName();
