@@ -25,7 +25,7 @@ class CompletePurchaseRequest extends AbstractRequest
         $data = $this->getSalesRequestParams();
         $data['Transaction']['CardholderPresentCode'] = "13";
         $secure3d = [
-            "AuthenticationCode" => $this->getCvv(),
+            "AuthenticationCode" => $this->getCavv(),
             "SecurityLevel" => $this->getEci(),
             "TxnID" => $this->getXid(),
             "Md" => $this->getMd(),
@@ -38,18 +38,18 @@ class CompletePurchaseRequest extends AbstractRequest
     /**
      * @return string
      */
-    public function getCvv(): string
+    public function getCavv(): string
     {
-        return $this->getParameter('cvv');
+        return $this->getParameter('cavv');
     }
 
     /**
      * @param string $value
      * @return CompletePurchaseRequest
      */
-    public function setCvv(string $value): CompletePurchaseRequest
+    public function setCavv(string $value): CompletePurchaseRequest
     {
-        return $this->setParameter('cvv', $value);
+        return $this->setParameter('cavv', $value);
     }
 
     /**
