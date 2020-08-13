@@ -27,7 +27,6 @@ class GatewayTest extends GatewayTestCase
         $this->gateway->setTestMode(true);
     }
 
-
     public function testAuthorize()
     {
         $this->options = [
@@ -68,21 +67,21 @@ class GatewayTest extends GatewayTestCase
     {
         $this->options = [
             'card' => $this->getCardInfo(),
-            'orderId' => '10082020_114108',
+            'orderId' => '10082020_114102',
             'username' => 'PROVAUT',
             'password' => '123qweASD/',
-            'amount' => "100",
+            'amount' => "10",
             'currency' => 'TRY',
-            'returnUrl' => "www.backref.com.tr",
-            'cancelUrl' => "www.backref.com.tr",
+            'returnUrl' => "https://eticaret.garanti.com.tr/destek/postback.aspx",
+            'cancelUrl' => "https://eticaret.garanti.com.tr/destek/postback.aspx",
             'installment' => "",
-            'paymentType' => '',
-            'clientIp' => '10.241.19.2'
+            'paymentType' => '3d',
+            'clientIp' => '10.241.19.2',
+            'secureKey' => '12345678'
         ];
 
         /** @var PurchaseResponse $response */
         $response = $this->gateway->purchase($this->options)->send();
-
         $this->assertTrue($response->isSuccessful());
     }
 
@@ -90,17 +89,17 @@ class GatewayTest extends GatewayTestCase
     {
         $this->options = [
             'card' => $this->getCardInfo(),
-            'orderId' => '8443343542',
+            'orderId' => '10082020_114212',
             'username' => 'PROVAUT',
-            'password' => '123qweASD',
-            'amount' => "1",
+            'password' => '123qweASD/',
+            'amount' => "10",
             'currency' => 'TRY',
-            'installment' => "1",
-            'cavv' => '1',
-            'eci' => '1',
-            'xid' => '1',
+            'installment' => "",
+            'cavv' => 'jCm0m+u/0hUfAREHBAMBcfN+pSo=',
+            'eci' => '02',
+            'xid' => 'RszfrwEYe/8xb7rnrPuh6C9pZSQ=',
             'md' => '1',
-            'paymentType' => ''
+            'clientIp' => '10.241.19.2'
         ];
 
         /** @var CompletePurchaseResponse $response */
@@ -114,10 +113,10 @@ class GatewayTest extends GatewayTestCase
     private function getCardInfo(): CreditCard
     {
         $cardInfo = $this->getValidCard();
-        $cardInfo['number'] = '5549608789641500';
-        $cardInfo['expiryMonth'] = "03";
-        $cardInfo['expiryYear'] = "2023";
-        $cardInfo['cvv'] = "712";
+        $cardInfo['number'] = '4282209004348015';
+        $cardInfo['expiryMonth'] = "08";
+        $cardInfo['expiryYear'] = "22";
+        $cardInfo['cvv'] = "123";
         $card = new CreditCard($cardInfo);
         $card->setEmail("emrez@garanti.com.tr");
         $card->setFirstName('Test name');
