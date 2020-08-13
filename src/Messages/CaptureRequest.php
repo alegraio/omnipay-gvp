@@ -5,10 +5,8 @@
 
 namespace Omnipay\Gvp\Messages;
 
-
 class CaptureRequest extends AbstractRequest
 {
-
     /**
      * @return array
      */

@@ -7,7 +7,7 @@ namespace Omnipay\Gvp\Messages;
 
 use Omnipay\Common\Message\RequestInterface;
 
-class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse
+abstract class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse
 {
     public function __construct(RequestInterface $request, $data)
     {
@@ -29,7 +29,7 @@ class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse
 
     public function getCode(): ?string
     {
-        return (string)$this->data["Transaction"]->Response->Code ?? null;
+        return (string)($this->data["Transaction"]->Response->Code ?? null);
     }
 
     /**
@@ -45,15 +45,5 @@ class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse
         }
 
         return $this->data = $content;
-    }
-
-    /**
-     * Is the response successful?
-     *
-     * @return bool
-     */
-    public function isSuccessful()
-    {
-
     }
 }

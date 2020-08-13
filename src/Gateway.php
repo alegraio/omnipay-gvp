@@ -13,7 +13,6 @@ use Omnipay\Gvp\Messages\CaptureRequest;
 use Omnipay\Gvp\Messages\CompletePurchaseRequest;
 use Omnipay\Gvp\Messages\PurchaseRequest;
 
-
 /**
  * @method \Omnipay\Common\Message\NotificationInterface acceptNotification(array $options = array())
  * @method \Omnipay\Common\Message\RequestInterface completeAuthorize(array $options = array())
@@ -69,6 +68,40 @@ class Gateway extends AbstractGateway
     public function setTerminalId(string $value): Gateway
     {
         return $this->setParameter('terminalId', $value);
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserName(): string
+    {
+        return $this->getParameter('username');
+    }
+
+    /**
+     * @param string $value
+     * @return Gateway
+     */
+    public function setUserName(string $value): Gateway
+    {
+        return $this->setParameter('username', $value);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword(): string
+    {
+        return $this->getParameter('password');
+    }
+
+    /**
+     * @param string $value
+     * @return Gateway
+     */
+    public function setPassword(string $value): Gateway
+    {
+        return $this->setParameter('password', $value);
     }
 
     /**

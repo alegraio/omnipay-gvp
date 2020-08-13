@@ -41,7 +41,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
      */
     public function getEndpoint(): string
     {
-        $paymentType = $this->getPaymentType() == '3d' ? '3d' : 'direct';
+        $paymentType = $this->getPaymentType() === '3d' ? '3d' : 'direct';
 
         return $this->getTestMode() ? $this->endpoints[$paymentType]["test"] : $this->endpoints[$paymentType]["prod"];
     }
@@ -140,12 +140,12 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     public function sendData($data)
     {
         try {
-            if ($this->getPaymentType() == '3d') {
+            if ($this->getPaymentType() === '3d') {
                 $body = http_build_query($data, '', '&');
             } else {
                 $document = new \DOMDocument('1.0', 'UTF-8');
                 $root = $document->createElement('GVPSRequest');
-                $xml = function ($root, $data) use ($document, &$xml) {
+                $xml = static function ($root, $data) use ($document, &$xml) {
                     foreach ($data as $key => $value) {
                         if (is_array($value)) {
                             $subs = $document->createElement($key);
@@ -376,7 +376,6 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         $params['refreshtime'] = 5;
         $params['cardnumber'] = $this->getCard()->getNumber();
         $params['cardexpiredatemonth'] = $this->getCard()->getExpiryMonth();
-        $params['cardexpiredateyear'] = $this->getCard()->getExpiryYear();
         $params['cardexpiredateyear'] = $this->getCard()->getExpiryYear();
         $params['cardcvv2'] = $this->getCard()->getCvv();
         $params['secure3dsecuritylevel'] = '3D';

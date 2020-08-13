@@ -18,14 +18,14 @@ class CompletePurchaseRequest extends AbstractRequest
     {
         $this->setPaymentType();
 
-        if (!in_array($this->getMd(), array(1, 2, 3, 4))) {
+        if (!in_array($this->getMd(), array(1, 2, 3, 4), false)) {
             throw new RuntimeException('3DSecure verification error');
         }
 
         $data = $this->getSalesRequestParams();
         $data['Transaction']['CardholderPresentCode'] = "13";
         $secure3d = [
-            "AuthenticationCode" => $this->getCavv(),
+            "AuthenticationCode" => $this->getCvv(),
             "SecurityLevel" => $this->getEci(),
             "TxnID" => $this->getXid(),
             "Md" => $this->getMd(),
@@ -38,18 +38,18 @@ class CompletePurchaseRequest extends AbstractRequest
     /**
      * @return string
      */
-    public function getCavv(): string
+    public function getCvv(): string
     {
-        return $this->getParameter('cavv');
+        return $this->getParameter('cvv');
     }
 
     /**
      * @param string $value
      * @return CompletePurchaseRequest
      */
-    public function setCavv(string $value): CompletePurchaseRequest
+    public function setCvv(string $value): CompletePurchaseRequest
     {
-        return $this->setParameter('cavv', $value);
+        return $this->setParameter('cvv', $value);
     }
 
     /**

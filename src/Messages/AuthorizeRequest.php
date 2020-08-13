@@ -5,10 +5,6 @@
 
 namespace Omnipay\Gvp\Messages;
 
-use Exception;
-use Omnipay\Common\Exception\InvalidResponseException;
-use Omnipay\Common\Message\ResponseInterface;
-
 class AuthorizeRequest extends AbstractRequest
 {
     /**

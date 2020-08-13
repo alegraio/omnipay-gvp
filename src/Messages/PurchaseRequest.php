@@ -6,7 +6,6 @@
 namespace Omnipay\Gvp\Messages;
 
 use Exception;
-use RuntimeException;
 
 class PurchaseRequest extends AbstractRequest
 {
@@ -18,7 +17,7 @@ class PurchaseRequest extends AbstractRequest
      */
     public function getData()
     {
-        if ($this->getPaymentType() == self::PAYMENT_TYPE_3D) {
+        if ($this->getPaymentType() === self::PAYMENT_TYPE_3D) {
             return $this->getSalesRequestParamsFor3d();
         }
         return $this->getSalesRequestParams();
