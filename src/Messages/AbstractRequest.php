@@ -223,6 +223,15 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
      * @param string $value
      * @return AbstractRequest
      */
+    public function setLang(string $value): AbstractRequest
+    {
+        return $this->setParameter('lang', $value);
+    }
+
+    /**
+     * @param string $value
+     * @return AbstractRequest
+     */
     public function setSecureKey(string $value): AbstractRequest
     {
         return $this->setParameter('secureKey', $value);
@@ -234,15 +243,6 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     public function getSecureKey(): string
     {
         return $this->getParameter('secureKey');
-    }
-
-    /**
-     * @param string $value
-     * @return AbstractRequest
-     */
-    public function setLang(string $value): AbstractRequest
-    {
-        return $this->setParameter('lang', $value);
     }
 
     /**
@@ -353,32 +353,33 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
     /**
      * @return array
-     * @throws \Omnipay\Common\Exception\InvalidRequestException
      */
     protected function getSalesRequestParamsFor3d(): array
     {
         $params['apiversion'] = $this->version;
         $params['mode'] = $this->getTestMode();
         $params['terminalprovuserid'] = $this->getUserName();
-        $params['terminaluserid'] = str_repeat('0', 9 - strlen($this->getTerminalId()));
-        $params['terminalid'] = str_repeat('0', 9 - strlen($this->getTerminalId()));
+        $params['terminaluserid'] = $this->getUserName();
+        $params['terminalid'] = $this->getTerminalId();
         $params['terminalmerchantid'] = $this->getMerchantId();
-        $params['orderid'] = $this->getOrderId();
-        $params['customeremailaddress'] = $this->getCard()->getEmail();
-        $params['customeripaddress'] = $this->getClientIp();
-        $params['txnamount'] = $this->getAmount();
+        $params['txntype'] = 'sales';
+        $params['txnamount'] = $this->getAmountInteger();
         $params['txncurrencycode'] = $this->currency_list[$this->getCurrency()];
         $params['txninstallmentcount'] = $this->getInstallment();
+        $params['customeremailaddress'] = $this->getCard()->getEmail();
+        $params['customeripaddress'] = $this->getClientIp();
+        $params['orderid'] = $this->getOrderId();
         $params['successurl'] = $this->getReturnUrl();
         $params['errorurl'] = $this->getCancelUrl();
         $params['lang'] = $this->getLang();
-        $params['txntimestamp'] = time();
-        $params['txntimeoutperiod'] = "60";
-        $params['addcampaigninstallment'] = "N";
-        $params['totallinstallmentcount'] = "0";
-        $params['installmentonlyforcommercialcard'] = "0";
-        $params['txntype'] = 'sales';
-        $params['secure3dsecuritylevel'] = '3d';
+        $params['txntimestamp'] = date("d/m/Y H:i:s");
+        $params['refreshtime'] = 5;
+        $params['cardnumber'] = $this->getCard()->getNumber();
+        $params['cardexpiredatemonth'] = $this->getCard()->getExpiryMonth();
+        $params['cardexpiredateyear'] = $this->getCard()->getExpiryYear();
+        $params['cardexpiredateyear'] = $this->getCard()->getExpiryYear();
+        $params['cardcvv2'] = $this->getCard()->getCvv();
+        $params['secure3dsecuritylevel'] = '3D';
 
         $hashData = strtoupper(sha1($this->getTerminalId() . $params['orderid'] . $params['txnamount'] . $params['successurl'] . $params['errorurl'] . $params['txntype'] . $params['txninstallmentcount'] . $this->getSecureKey() . $this->getSecurityHash()));
         $params['secure3dhash'] = $hashData;

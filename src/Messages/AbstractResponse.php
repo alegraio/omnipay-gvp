@@ -33,25 +33,27 @@ class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse
     }
 
     /**
-     * @return boolean
-     */
-    public function isSuccessful(): bool
-    {
-        return isset($this->data["Transaction"]) ? $this->data["Transaction"]->Response->Code == '00' : false;
-    }
-
-    /**
      * @param string $data
      * @return array
      */
     public function setData(string $data): array
     {
         if (mb_strpos($data, "html")) {
-            $content = (array)trim(strip_tags($data));
+            $content = (array)$data;
         } else {
             $content = (array)simplexml_load_string($data);
         }
 
         return $this->data = $content;
+    }
+
+    /**
+     * Is the response successful?
+     *
+     * @return bool
+     */
+    public function isSuccessful()
+    {
+
     }
 }
