@@ -40,6 +40,7 @@ abstract class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse
     {
         if (mb_strpos($data, "html")) {
             $content = (array)$data;
+            $content['isHtml'] = true;
         } else {
             $content = (array)simplexml_load_string($data);
         }

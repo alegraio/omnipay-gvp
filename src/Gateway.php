@@ -12,13 +12,13 @@ use Omnipay\Gvp\Messages\AuthorizeRequest;
 use Omnipay\Gvp\Messages\CaptureRequest;
 use Omnipay\Gvp\Messages\CompletePurchaseRequest;
 use Omnipay\Gvp\Messages\PurchaseRequest;
+use Omnipay\Gvp\Messages\RefundRequest;
+use Omnipay\Gvp\Messages\VoidRequest;
 
 /**
  * @method \Omnipay\Common\Message\NotificationInterface acceptNotification(array $options = array())
  * @method \Omnipay\Common\Message\RequestInterface completeAuthorize(array $options = array())
- * @method \Omnipay\Common\Message\RequestInterface refund(array $options = array())
  * @method \Omnipay\Common\Message\RequestInterface fetchTransaction(array $options = [])
- * @method \Omnipay\Common\Message\RequestInterface void(array $options = array())
  * @method \Omnipay\Common\Message\RequestInterface createCard(array $options = array())
  * @method \Omnipay\Common\Message\RequestInterface updateCard(array $options = array())
  * @method \Omnipay\Common\Message\RequestInterface deleteCard(array $options = array())
@@ -138,5 +138,23 @@ class Gateway extends AbstractGateway
     public function completePurchase(array $parameters = []): RequestInterface
     {
         return $this->createRequest(CompletePurchaseRequest::class, $parameters);
+    }
+
+    /**
+     * @param array $parameters
+     * @return RequestInterface
+     */
+    public function void(array $parameters = []): RequestInterface
+    {
+        return $this->createRequest(VoidRequest::class, $parameters);
+    }
+
+    /**
+     * @param array $parameters
+     * @return RequestInterface
+     */
+    public function refund(array $parameters = []): RequestInterface
+    {
+        return $this->createRequest(RefundRequest::class, $parameters);
     }
 }
