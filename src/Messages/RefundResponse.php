@@ -1,11 +1,11 @@
 <?php
 /**
- * Gvp Capture Response
+ * Gvp Refund Response
  */
 
 namespace Omnipay\Gvp\Messages;
 
-class CaptureResponse extends AbstractResponse
+class RefundResponse extends AbstractResponse
 {
     /**
      * @return boolean

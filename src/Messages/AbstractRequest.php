@@ -271,6 +271,18 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     }
 
     /**
+     * @return string
+     */
+    protected function getRefundOrVoidHash(): string
+    {
+        return strtoupper(SHA1(sprintf('%s%s%s%s',
+            $this->getOrderId(),
+            $this->getTerminalId(),
+            $this->getAmountInteger(),
+            $this->getSecurityHash())));
+    }
+
+    /**
      * @return array
      */
     protected function getSalesRequestParams(): array
@@ -297,7 +309,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         $data['Terminal'] = [
             'ProvUserID' => $this->getUserName(),
             'HashData' => $this->getTransactionHash(),
-            'UserID' => 'PROVAUT',
+            'UserID' => $this->getUserName(),
             'ID' => $this->getTerminalId(),
             'MerchantID' => $this->getMerchantId()
         ];
