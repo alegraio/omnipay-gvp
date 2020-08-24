@@ -15,14 +15,8 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
     /** @var array */
     protected $endpoints = [
-        'direct' => [
-            'test' => 'https://sanalposprovtest.garanti.com.tr/VPServlet',
-            'prod' => 'https://sanalposprov.garanti.com.tr/VPServlet'
-        ],
-        '3d' => [
-            'test' => 'https://sanalposprovtest.garanti.com.tr/servlet/gt3dengine',
-            'prod' => 'https://sanalposprov.garanti.com.tr/servlet/gt3dengine'
-        ]
+        'test' => 'https://sanalposprovtest.garanti.com.tr/VPServlet',
+        'prod' => 'https://sanalposprov.garanti.com.tr/VPServlet'
     ];
 
     protected $currency_list = [
@@ -41,9 +35,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
      */
     public function getEndpoint(): string
     {
-        $paymentType = $this->getPaymentMethod() === '3d' ? '3d' : 'direct';
-
-        return $this->getTestMode() ? $this->endpoints[$paymentType]["test"] : $this->endpoints[$paymentType]["prod"];
+        return $this->getTestMode() ? $this->endpoints["test"] : $this->endpoints["prod"];
     }
 
     /**
@@ -123,7 +115,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     {
         try {
             if ($this->getPaymentMethod() === '3d') {
-                $body = http_build_query($data, '', '&');
+                $response = $data;
             } else {
                 $document = new \DOMDocument('1.0', 'UTF-8');
                 $root = $document->createElement('GVPSRequest');
@@ -141,14 +133,12 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
                 $xml($root, $data);
                 $document->appendChild($root);
-                $body = $document->saveXML();
+
+                $httpRequest = $this->httpClient->request($this->getHttpMethod(), $this->getEndpoint(),
+                    ['Content-Type' => 'application/x-www-form-urlencoded'], $document->saveXML());
+
+                $response = (string)$httpRequest->getBody()->getContents();
             }
-
-            $httpRequest = $this->httpClient->request($this->getHttpMethod(), $this->getEndpoint(),
-                ['Content-Type' => 'application/x-www-form-urlencoded'], $body
-            );
-
-            $response = (string)$httpRequest->getBody()->getContents();
 
             return $this->response = $this->createResponse($response);
         } catch (\Exception $e) {
@@ -351,7 +341,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     protected function getSalesRequestParamsFor3d(): array
     {
         $params['apiversion'] = $this->version;
-        $params['mode'] = $this->getTestMode();
+        $params['mode'] = $this->getTestMode() ? 'TEST' : 'PROD';
         $params['terminalprovuserid'] = $this->getUserName();
         $params['terminaluserid'] = $this->getUserName();
         $params['terminalid'] = $this->getTerminalId();

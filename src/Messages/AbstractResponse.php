@@ -10,6 +10,15 @@ use Omnipay\Common\Message\RequestInterface;
 
 abstract class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse implements RedirectResponseInterface
 {
+    /** @var bool */
+    public $isRedirect = false;
+
+    /** @var array */
+    public $redirectUrl = [
+        'test' => 'https://sanalposprovtest.garanti.com.tr/servlet/gt3dengine',
+        'prod' => 'https://sanalposprov.garanti.com.tr/servlet/gt3dengine'
+    ];
+
     public function __construct(RequestInterface $request, $data)
     {
         parent::__construct($request, $data);
@@ -34,18 +43,34 @@ abstract class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse
     }
 
     /**
-     * @param string $data
+     * @param mixed $data
      * @return array
      */
-    public function setData(string $data): array
+    public function setData($data): array
     {
-        if (mb_strpos($data, "html")) {
-            $content = (array)$data;
-            $content['isHtml'] = true;
+        if (is_array($data)) {
+            $content = $data;
+            $this->setIsRedirect(true);
         } else {
             $content = (array)simplexml_load_string($data);
         }
 
         return $this->data = $content;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsRedirect(): bool
+    {
+        return $this->isRedirect;
+    }
+
+    /**
+     * @param bool $isRedirect
+     */
+    public function setIsRedirect(bool $isRedirect): void
+    {
+        $this->isRedirect = $isRedirect;
     }
 }
