@@ -41,7 +41,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
      */
     public function getEndpoint(): string
     {
-        $paymentType = $this->getPaymentType() === '3d' ? '3d' : 'direct';
+        $paymentType = $this->getPaymentMethod() === '3d' ? '3d' : 'direct';
 
         return $this->getTestMode() ? $this->endpoints[$paymentType]["test"] : $this->endpoints[$paymentType]["prod"];
     }
@@ -115,24 +115,6 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     }
 
     /**
-     * @return string
-     */
-    public function getPaymentType(): string
-    {
-        return $this->getParameter('paymentType');
-    }
-
-    /**
-     * @param string $value
-     * @return AbstractRequest
-     */
-    public function setPaymentType(string $value = ""): AbstractRequest
-    {
-        return $this->setParameter('paymentType', $value);
-    }
-
-
-    /**
      * @param mixed $data
      * @return ResponseInterface|AbstractResponse
      * @throws InvalidResponseException
@@ -140,7 +122,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     public function sendData($data)
     {
         try {
-            if ($this->getPaymentType() === '3d') {
+            if ($this->getPaymentMethod() === '3d') {
                 $body = http_build_query($data, '', '&');
             } else {
                 $document = new \DOMDocument('1.0', 'UTF-8');

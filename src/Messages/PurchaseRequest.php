@@ -17,7 +17,7 @@ class PurchaseRequest extends AbstractRequest
      */
     public function getData()
     {
-        if ($this->getPaymentType() === self::PAYMENT_TYPE_3D) {
+        if ($this->getPaymentMethod() === self::PAYMENT_TYPE_3D) {
             return $this->getSalesRequestParamsFor3d();
         }
         return $this->getSalesRequestParams();

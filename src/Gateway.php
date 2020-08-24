@@ -105,6 +105,23 @@ class Gateway extends AbstractGateway
     }
 
     /**
+     * @param string $value
+     * @return Gateway
+     */
+    public function setSecureKey(string $value): Gateway
+    {
+        return $this->setParameter('secureKey', $value);
+    }
+
+    /**
+     * @return string
+     */
+    public function getSecureKey(): string
+    {
+        return $this->getParameter('secureKey');
+    }
+
+    /**
      * @param array $parameters
      * @return AbstractRequest|RequestInterface
      */

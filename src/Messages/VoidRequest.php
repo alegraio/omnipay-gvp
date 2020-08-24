@@ -15,7 +15,6 @@ class VoidRequest extends AbstractRequest
      */
     public function getData(): array
     {
-        $this->setPaymentType();
         $data['Version'] = $this->version;
         $data['Mode'] = $this->getTestMode() ? 'TEST' : 'PROD';
         $data['Terminal'] = [

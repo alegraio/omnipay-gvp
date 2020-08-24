@@ -5,9 +5,10 @@
 
 namespace Omnipay\Gvp\Messages;
 
+use Omnipay\Common\Message\RedirectResponseInterface;
 use Omnipay\Common\Message\RequestInterface;
 
-abstract class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse
+abstract class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse implements RedirectResponseInterface
 {
     public function __construct(RequestInterface $request, $data)
     {

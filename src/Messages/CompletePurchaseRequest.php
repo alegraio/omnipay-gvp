@@ -16,8 +16,6 @@ class CompletePurchaseRequest extends AbstractRequest
      */
     public function getData()
     {
-        $this->setPaymentType();
-
         if (!in_array($this->getMd(), array(1, 2, 3, 4), false)) {
             throw new RuntimeException('3DSecure verification error');
         }
