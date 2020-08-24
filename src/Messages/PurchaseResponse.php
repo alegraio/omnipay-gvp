@@ -13,10 +13,10 @@ class PurchaseResponse extends AbstractResponse
      */
     public function isSuccessful(): bool
     {
-        if (isset($this->getData()['isHtml'])) {
+        if ($this->getIsRedirect()) {
             return true;
         } else {
-            return $this->data["Transaction"]->Response->Code === '00';
+            return current($this->data["Transaction"]->Response->Code) === '00';
         }
     }
 
@@ -25,11 +25,7 @@ class PurchaseResponse extends AbstractResponse
      */
     public function isRedirect(): bool
     {
-        if (isset($this->getData()['isHtml'])) {
-            return true;
-        }
-
-        return false;
+        return $this->getIsRedirect();
     }
 
     /**
@@ -38,5 +34,23 @@ class PurchaseResponse extends AbstractResponse
     public function getRedirectData(): array
     {
         return $this->isRedirect() ? $this->getData() : [];
+    }
+
+    /**
+     * @return string
+     */
+    public function getRedirectMethod(): string
+    {
+        return 'POST';
+    }
+
+    /**
+     * @return string
+     */
+    public function getRedirectUrl(): string
+    {
+        $urlType = $this->getRequest()->getParameters()['testMode'] ? 'test' : 'prod';
+
+        return $this->isRedirect() ? $this->redirectUrl[$urlType] : null;
     }
 }

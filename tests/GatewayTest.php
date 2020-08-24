@@ -27,53 +27,21 @@ class GatewayTest extends GatewayTestCase
         $this->gateway->setMerchantId('7000679');
         $this->gateway->setTerminalId('30691297');
         $this->gateway->setTestMode(true);
-        $this->gateway->setUserName('PROVRFN');
+        $this->gateway->setUserName('PROVAUT');
         $this->gateway->setPassword('123qweASD/');
-    }
-
-    public function testAuthorize()
-    {
-        $this->options = [
-            'card' => $this->getCardInfo(),
-            'orderId' => '10082020_324109',
-            'amount' => "100",
-            'currency' => 'TRY',
-            'installment' => "",
-            'clientIp' => '10.241.19.2'
-        ];
-
-        /** @var AuthorizeResponse $response */
-        $response = $this->gateway->authorize($this->options)->send();
-        $this->assertTrue($response->isSuccessful());
-    }
-
-    public function testCapture()
-    {
-        $this->options = [
-            'card' => $this->getCardInfo(),
-            'orderId' => '10082020_324109',
-            'amount' => "100",
-            'currency' => 'TRY',
-            'installment' => "",
-            'clientIp' => '10.241.19.2'
-        ];
-
-        /** @var CaptureResponse $response */
-        $response = $this->gateway->capture($this->options)->send();
-        $this->assertTrue($response->isSuccessful());
     }
 
     public function testPurchase()
     {
         $this->options = [
             'card' => $this->getCardInfo(),
-            'orderId' => '10082020_114102',
+            'orderId' => '43282041_14102',
             'amount' => "10",
             'currency' => 'TRY',
             'returnUrl' => "https://eticaret.garanti.com.tr/destek/postback.aspx",
             'cancelUrl' => "https://eticaret.garanti.com.tr/destek/postback.aspx",
             'installment' => "",
-            'paymentType' => '',
+            'paymentMethod' => '',
             'clientIp' => '10.241.19.2',
             'secureKey' => '12345678'
         ];
@@ -87,15 +55,15 @@ class GatewayTest extends GatewayTestCase
     {
         $this->options = [
             'card' => $this->getCardInfo(),
-            'orderId' => '10082020_114212',
-            'amount' => "10",
+            'orderId' => '234567',
+            'amount' => "300",
             'currency' => 'TRY',
             'installment' => "",
             'cavv' => 'jCm0m+u/0hUfAREHBAMBcfN+pSo=',
             'eci' => '02',
             'xid' => 'RszfrwEYe/8xb7rnrPuh6C9pZSQ=',
             'md' => '1',
-            'clientIp' => '10.241.19.2'
+            'clientIp' => '172.18.0.1'
         ];
 
         /** @var CompletePurchaseResponse $response */
@@ -133,6 +101,39 @@ class GatewayTest extends GatewayTestCase
 
         /** @var RefundResponse $response */
         $response = $this->gateway->refund($this->options)->send();
+        $this->assertTrue($response->isSuccessful());
+    }
+
+
+    public function testAuthorize()
+    {
+        $this->options = [
+            'card' => $this->getCardInfo(),
+            'orderId' => '10082020_324109',
+            'amount' => "100",
+            'currency' => 'TRY',
+            'installment' => "",
+            'clientIp' => '10.241.19.2'
+        ];
+
+        /** @var AuthorizeResponse $response */
+        $response = $this->gateway->authorize($this->options)->send();
+        $this->assertTrue($response->isSuccessful());
+    }
+
+    public function testCapture()
+    {
+        $this->options = [
+            'card' => $this->getCardInfo(),
+            'orderId' => '10082020_324109',
+            'amount' => "100",
+            'currency' => 'TRY',
+            'installment' => "",
+            'clientIp' => '10.241.19.2'
+        ];
+
+        /** @var CaptureResponse $response */
+        $response = $this->gateway->capture($this->options)->send();
         $this->assertTrue($response->isSuccessful());
     }
 
