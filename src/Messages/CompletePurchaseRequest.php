@@ -16,7 +16,7 @@ class CompletePurchaseRequest extends AbstractRequest
      */
     public function getData()
     {
-        if (!in_array($this->getMd(), array(1, 2, 3, 4), false)) {
+        if (!in_array($this->getMdStatus(), array(1, 2, 3, 4), false)) {
             throw new RuntimeException('3DSecure verification error');
         }
 
@@ -99,6 +99,23 @@ class CompletePurchaseRequest extends AbstractRequest
     public function setMd(string $value): CompletePurchaseRequest
     {
         return $this->setParameter('md', $value);
+    }
+
+    /**
+     * @return string
+     */
+    public function getMdStatus(): string
+    {
+        return $this->getParameter('mdStatus');
+    }
+
+    /**
+     * @param string $value
+     * @return CompletePurchaseRequest
+     */
+    public function setMdStatus(string $value): CompletePurchaseRequest
+    {
+        return $this->setParameter('mdStatus', $value);
     }
 
     /**
