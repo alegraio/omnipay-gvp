@@ -31,17 +31,50 @@ class GatewayTest extends GatewayTestCase
         $this->gateway->setPassword('123qweASD/');
     }
 
+
+    public function testCapture()
+    {
+        $this->options = [
+            'card' => $this->getCardInfo(),
+            'orderId' => '90082020_324109',
+            'amount' => "100",
+            'currency' => 'TRY',
+            'installment' => "",
+            'clientIp' => '10.241.19.2'
+        ];
+
+        /** @var CaptureResponse $response */
+        $response = $this->gateway->capture($this->options)->send();
+        $this->assertTrue($response->isSuccessful());
+    }
+
+    public function testAuthorize()
+    {
+        $this->options = [
+            'card' => $this->getCardInfo(),
+            'orderId' => '90082020_324109',
+            'amount' => "100",
+            'currency' => 'TRY',
+            'installment' => "",
+            'clientIp' => '10.241.19.2'
+        ];
+
+        /** @var AuthorizeResponse $response */
+        $response = $this->gateway->authorize($this->options)->send();
+        $this->assertTrue($response->isSuccessful());
+    }
+
     public function testPurchase()
     {
         $this->options = [
             'card' => $this->getCardInfo(),
-            'orderId' => '43282041_14102',
+            'orderId' => '89852041_14102',
             'amount' => "10",
             'currency' => 'TRY',
             'returnUrl' => "https://eticaret.garanti.com.tr/destek/postback.aspx",
             'cancelUrl' => "https://eticaret.garanti.com.tr/destek/postback.aspx",
             'installment' => "",
-            'paymentMethod' => '',
+            'paymentMethod' => '3d',
             'clientIp' => '10.241.19.2',
             'secureKey' => '12345678'
         ];
@@ -105,38 +138,6 @@ class GatewayTest extends GatewayTestCase
         $this->assertTrue($response->isSuccessful());
     }
 
-
-    public function testAuthorize()
-    {
-        $this->options = [
-            'card' => $this->getCardInfo(),
-            'orderId' => '10082020_324109',
-            'amount' => "100",
-            'currency' => 'TRY',
-            'installment' => "",
-            'clientIp' => '10.241.19.2'
-        ];
-
-        /** @var AuthorizeResponse $response */
-        $response = $this->gateway->authorize($this->options)->send();
-        $this->assertTrue($response->isSuccessful());
-    }
-
-    public function testCapture()
-    {
-        $this->options = [
-            'card' => $this->getCardInfo(),
-            'orderId' => '10082020_324109',
-            'amount' => "100",
-            'currency' => 'TRY',
-            'installment' => "",
-            'clientIp' => '10.241.19.2'
-        ];
-
-        /** @var CaptureResponse $response */
-        $response = $this->gateway->capture($this->options)->send();
-        $this->assertTrue($response->isSuccessful());
-    }
 
     /**
      * @return CreditCard
