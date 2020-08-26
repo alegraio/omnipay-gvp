@@ -73,4 +73,16 @@ abstract class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse
     {
         $this->isRedirect = $isRedirect;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isSuccessful(): bool
+    {
+        if ($this->getIsRedirect()) {
+            return true;
+        } else {
+            return current($this->data["Transaction"]->Response->Code) === '00';
+        }
+    }
 }
