@@ -39,6 +39,6 @@ class PurchaseResponse extends AbstractResponse
     {
         $urlType = $this->getRequest()->getParameters()['testMode'] ? 'test' : 'prod';
 
-        return $this->isRedirect() ? $this->redirectUrl[$urlType] : null;
+        return $this->isRedirect() ? $this->redirectUrl[$urlType] : '';
     }
 }

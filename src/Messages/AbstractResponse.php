@@ -89,8 +89,13 @@ abstract class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse
     {
         if ($this->getIsRedirect()) {
             return true;
-        } else {
-            return (string)$this->data->Transaction->Response->Code === '00';
         }
+
+        return (string)$this->data->Transaction->Response->Code === '00';
+    }
+
+    public function getTransactionReference(): ?string
+    {
+        return (string)$this->data->Transaction->RetrefNum;
     }
 }
