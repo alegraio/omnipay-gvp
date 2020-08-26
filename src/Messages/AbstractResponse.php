@@ -19,6 +19,11 @@ abstract class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse
         'prod' => 'https://sanalposprov.garanti.com.tr/servlet/gt3dengine'
     ];
 
+    /**
+     * AbstractResponse constructor.
+     * @param RequestInterface $request
+     * @param $data
+     */
     public function __construct(RequestInterface $request, $data)
     {
         parent::__construct($request, $data);
@@ -26,36 +31,39 @@ abstract class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getMessage(): string
+    public function getMessage(): ?string
     {
+
         if (!$this->isSuccessful()) {
-            return $this->data["Transaction"]->Response->ErrorMsg . "->" . $this->data["Transaction"]->Response->SysErrMsg;
+            return (string)$this->data->Transaction->Response->ErrorMsg;
         }
 
-        return isset($this->data["Transaction"]) ? $this->data["Transaction"]->Response->Message : $this->data;
-    }
-
-    public function getCode(): ?string
-    {
-        return (string)($this->data["Transaction"]->Response->Code ?? null);
+        return (string)(!$this->getIsRedirect() ? $this->data->Transaction->Response->Message : null);
     }
 
     /**
-     * @param mixed $data
-     * @return array
+     * @return string|null
      */
-    public function setData($data): array
+    public function getCode(): ?string
+    {
+        return (string)($this->data->Transaction->Response->Code ?? null);
+    }
+
+    /**
+     * @param $data
+     */
+    public function setData($data): void
     {
         if (is_array($data)) {
             $content = $data;
             $this->setIsRedirect(true);
         } else {
-            $content = (array)simplexml_load_string($data);
+            $content = simplexml_load_string($data);
         }
 
-        return $this->data = $content;
+        $this->data = $content;
     }
 
     /**
@@ -82,7 +90,7 @@ abstract class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse
         if ($this->getIsRedirect()) {
             return true;
         } else {
-            return current($this->data["Transaction"]->Response->Code) === '00';
+            return (string)$this->data->Transaction->Response->Code === '00';
         }
     }
 }
