@@ -63,6 +63,7 @@ class GatewayTest extends GatewayTestCase
             'eci' => '02',
             'xid' => 'RszfrwEYe/8xb7rnrPuh6C9pZSQ=',
             'md' => '1',
+            'mdStatus' => '1',
             'clientIp' => '172.18.0.1'
         ];
 

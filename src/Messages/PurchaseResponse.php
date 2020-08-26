@@ -9,18 +9,6 @@ class PurchaseResponse extends AbstractResponse
 {
 
     /**
-     * @return boolean
-     */
-    public function isSuccessful(): bool
-    {
-        if ($this->getIsRedirect()) {
-            return true;
-        } else {
-            return current($this->data["Transaction"]->Response->Code) === '00';
-        }
-    }
-
-    /**
      * @return bool
      */
     public function isRedirect(): bool
