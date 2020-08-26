@@ -12,6 +12,6 @@ class VoidResponse extends AbstractResponse
      */
     public function isSuccessful(): bool
     {
-        return $this->data["Transaction"]->Response->Code === '00';
+        return current($this->data["Transaction"]->Response->Code) === '00';
     }
 }
