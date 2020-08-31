@@ -32,6 +32,25 @@ class GatewayTest extends GatewayTestCase
     }
 
 
+    public function testCompletePurchase()
+    {
+        $this->options = [
+            'orderId' => '234567',
+            'amount' => "300",
+            'currency' => 'TRY',
+            'cavv' => 'jCm0m+u/0hUfAREHBAMBcfN+pSo=',
+            'eci' => '02',
+            'xid' => 'RszfrwEYe/8xb7rnrPuh6C9pZSQ=',
+            'md' => 'SbEsOKX7ObDWDySsIxdAWk+S+OBRqtO9JhbzBb2vwcwcMfMi8VJcrKYBp01awsE1igb80xCyNEI/BNFWrX8oWwIKPyiRfx+dQIiKnFFIkyv1ZIVKeQ27LLFEx62qjVpSI31fondWTP98n7pChG/Jmg==',
+            'mdStatus' => '1',
+            'clientIp' => '172.18.0.1'
+        ];
+
+        /** @var CompletePurchaseResponse $response */
+        $response = $this->gateway->completePurchase($this->options)->send();
+        $this->assertTrue($response->isSuccessful());
+    }
+
     public function testCapture()
     {
         $this->options = [
@@ -84,26 +103,6 @@ class GatewayTest extends GatewayTestCase
         $this->assertTrue($response->isSuccessful());
     }
 
-    public function testCompletePurchase()
-    {
-        $this->options = [
-            'card' => $this->getCardInfo(),
-            'orderId' => '234567',
-            'amount' => "300",
-            'currency' => 'TRY',
-            'installment' => "",
-            'cavv' => 'jCm0m+u/0hUfAREHBAMBcfN+pSo=',
-            'eci' => '02',
-            'xid' => 'RszfrwEYe/8xb7rnrPuh6C9pZSQ=',
-            'md' => '1',
-            'mdStatus' => '1',
-            'clientIp' => '172.18.0.1'
-        ];
-
-        /** @var CompletePurchaseResponse $response */
-        $response = $this->gateway->completePurchase($this->options)->send();
-        $this->assertTrue($response->isSuccessful());
-    }
 
     public function testVoid()
     {

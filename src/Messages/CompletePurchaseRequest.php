@@ -20,7 +20,7 @@ class CompletePurchaseRequest extends AbstractRequest
             throw new RuntimeException('3DSecure verification error');
         }
 
-        $data = $this->getSalesRequestParams();
+        $data = $this->getCompleteSalesRequestParams();
         $data['Transaction']['CardholderPresentCode'] = "13";
         $secure3d = [
             "AuthenticationCode" => $this->getCavv(),
