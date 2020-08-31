@@ -96,6 +96,10 @@ abstract class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse
 
     public function getTransactionReference(): ?string
     {
-        return (string)$this->data->Transaction->RetrefNum;
+        if (is_object($this->data)) {
+            return (string)$this->data->Transaction->RetrefNum;
+        }
+
+        return parent::getTransactionReference();
     }
 }
