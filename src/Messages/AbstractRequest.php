@@ -245,6 +245,18 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     /**
      * @return string
      */
+    protected function getCompletePurchaseTransactionHash(): string
+    {
+        return strtoupper(SHA1(sprintf('%s%s%s%s',
+            $this->getOrderId(),
+            $this->getTerminalId(),
+            $this->getAmountInteger(),
+            $this->getSecurityHash())));
+    }
+
+    /**
+     * @return string
+     */
     protected function getRefundOrVoidHash(): string
     {
         return strtoupper(SHA1(sprintf('%s%s%s%s',
@@ -259,10 +271,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
      */
     protected function getSalesRequestParams(): array
     {
-        $data['Version'] = $this->version;
-        $data['Mode'] = $this->getTestMode() ? 'TEST' : 'PROD';
-
-
+        $data = $this->getInfo();
         $data['Card'] = array(
             'Number' => $this->getCard()->getNumber(),
             'ExpireDate' => $this->getCard()->getExpiryDate('my'),
@@ -301,10 +310,41 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     /**
      * @return array
      */
+    protected function getCompleteSalesRequestParams(): array
+    {
+        $data = $this->getInfo();
+        $data['Order'] = array(
+            'OrderID' => $this->getOrderId()
+        );
+
+        $data['Customer'] = array(
+            'IPAddress' => $this->getClientIp(),
+        );
+
+        $data['Terminal'] = [
+            'ProvUserID' => $this->getUserName(),
+            'HashData' => $this->getCompletePurchaseTransactionHash(),
+            'UserID' => $this->getUserName(),
+            'ID' => $this->getTerminalId(),
+            'MerchantID' => $this->getMerchantId()
+        ];
+
+        $data['Transaction'] = array(
+            'Type' => 'sales',
+            'Amount' => $this->getAmountInteger(),
+            'CurrencyCode' => $this->currency_list[$this->getCurrency()],
+            'MotoInd' => "N"
+        );
+
+        return $data;
+    }
+
+    /**
+     * @return array
+     */
     protected function getAuthorizeRequestParams(): array
     {
-        $data['Version'] = $this->version;
-        $data['Mode'] = $this->getTestMode() ? 'TEST' : 'PROD';
+        $data = $this->getInfo();
         $data['Terminal'] = [
             'ProvUserID' => $this->getUserName(),
             'HashData' => $this->getTransactionHash(),
@@ -376,5 +416,16 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         $terminalId = sprintf('%s%s', $tidPrefix, $this->getTerminalId());
 
         return strtoupper(SHA1(sprintf('%s%s', $this->getPassword(), $terminalId)));
+    }
+
+    /**
+     * @return array
+     */
+    private function getInfo(): array
+    {
+        $data['Version'] = $this->version;
+        $data['Mode'] = $this->getTestMode() ? 'TEST' : 'PROD';
+
+        return $data;
     }
 }
