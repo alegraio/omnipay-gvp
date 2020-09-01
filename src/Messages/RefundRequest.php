@@ -19,7 +19,7 @@ class RefundRequest extends AbstractRequest
         $data['Mode'] = $this->getTestMode() ? 'TEST' : 'PROD';
         $data['Terminal'] = [
             'ProvUserID' => $this->getUserName(),
-            'HashData' => $this->getRefundOrVoidHash(),
+            'HashData' => $this->getTransactionHashWithoutCardNumber(),
             'UserID' => $this->getUserName(),
             'ID' => $this->getTerminalId(),
             'MerchantID' => $this->getMerchantId()

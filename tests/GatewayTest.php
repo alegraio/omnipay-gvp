@@ -32,16 +32,38 @@ class GatewayTest extends GatewayTestCase
     }
 
 
+    public function testPurchase()
+    {
+        $this->options = [
+            'card' => $this->getCardInfo(),
+            'orderId' => '8985204111',
+            'amount' => "100",
+            'currency' => 'TRY',
+            'returnUrl' => "https://eticaret.garanti.com.tr/destek/postback.aspx",
+            'cancelUrl' => "https://eticaret.garanti.com.tr/destek/postback.aspx",
+            'installment' => "",
+            'paymentMethod' => '3d',
+            'clientIp' => '10.241.19.2',
+            'secureKey' => '12345678'
+        ];
+
+        /** @var PurchaseResponse $response */
+        $response = $this->gateway->purchase($this->options)->send();
+
+        $this->assertTrue($response->isSuccessful());
+    }
+
+
     public function testCompletePurchase()
     {
         $this->options = [
-            'orderId' => '234567',
-            'amount' => "300",
+            'orderId' => '424569',
+            'amount' => "3",
             'currency' => 'TRY',
             'cavv' => 'jCm0m+u/0hUfAREHBAMBcfN+pSo=',
             'eci' => '02',
             'xid' => 'RszfrwEYe/8xb7rnrPuh6C9pZSQ=',
-            'md' => 'SbEsOKX7ObDWDySsIxdAWk+S+OBRqtO9JhbzBb2vwcwcMfMi8VJcrKYBp01awsE1igb80xCyNEI/BNFWrX8oWwIKPyiRfx+dQIiKnFFIkyv1ZIVKeQ27LLFEx62qjVpSI31fondWTP98n7pChG/Jmg==',
+            'md' => 'SbEsOKX7ObDWDySsIxdAWk+S+OBRqtO9JhbzBb2vwcwJ7nw4PmXWPaXT2zLq3Mz4hAI7F3GTIgCh4F8EC2l0LMYOr9yaA8G0yq3hudtek3FZtMRuxD29rUwF3a10zd3fQI/tSTSHkMdiT5kjKRC4Eg==',
             'mdStatus' => '1',
             'clientIp' => '172.18.0.1'
         ];
@@ -83,27 +105,6 @@ class GatewayTest extends GatewayTestCase
         $this->assertTrue($response->isSuccessful());
     }
 
-    public function testPurchase()
-    {
-        $this->options = [
-            'card' => $this->getCardInfo(),
-            'orderId' => '89852041_14102',
-            'amount' => "10",
-            'currency' => 'TRY',
-            'returnUrl' => "https://eticaret.garanti.com.tr/destek/postback.aspx",
-            'cancelUrl' => "https://eticaret.garanti.com.tr/destek/postback.aspx",
-            'installment' => "",
-            'paymentMethod' => '3d',
-            'clientIp' => '10.241.19.2',
-            'secureKey' => '12345678'
-        ];
-
-        /** @var PurchaseResponse $response */
-        $response = $this->gateway->purchase($this->options)->send();
-        $this->assertTrue($response->isSuccessful());
-    }
-
-
     public function testVoid()
     {
         $this->options = [
@@ -144,10 +145,10 @@ class GatewayTest extends GatewayTestCase
     private function getCardInfo(): CreditCard
     {
         $cardInfo = $this->getValidCard();
-        $cardInfo['number'] = '5406697543211173';//4282209004348015
-        $cardInfo['expiryMonth'] = "03"; //08";
-        $cardInfo['expiryYear'] = "23";//22";
-        $cardInfo['cvv'] = "465";//123";
+        $cardInfo['number'] = '4282209004348015';
+        $cardInfo['expiryMonth'] = "08";
+        $cardInfo['expiryYear'] = "22";
+        $cardInfo['cvv'] = "123";
         $card = new CreditCard($cardInfo);
         $card->setEmail("emrez@garanti.com.tr");
         $card->setFirstName('Test name');

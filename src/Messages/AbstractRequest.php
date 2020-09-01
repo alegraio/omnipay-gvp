@@ -231,43 +231,38 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
     /**
      * @return string
+     * @throws \Omnipay\Common\Exception\InvalidRequestException
      */
     protected function getTransactionHash(): string
     {
+        $amount = (int)$this->getAmount();
+
         return strtoupper(SHA1(sprintf('%s%s%s%s%s',
             $this->getOrderId(),
             $this->getTerminalId(),
             $this->getCard()->getNumber(),
-            $this->getAmountInteger(),
+            $amount,
             $this->getSecurityHash())));
     }
 
     /**
      * @return string
+     * @throws \Omnipay\Common\Exception\InvalidRequestException
      */
-    protected function getCompletePurchaseTransactionHash(): string
+    protected function getTransactionHashWithoutCardNumber(): string
     {
-        return strtoupper(SHA1(sprintf('%s%s%s%s',
-            $this->getOrderId(),
-            $this->getTerminalId(),
-            $this->getAmountInteger(),
-            $this->getSecurityHash())));
-    }
+        $amount = (int)$this->getAmount();
 
-    /**
-     * @return string
-     */
-    protected function getRefundOrVoidHash(): string
-    {
         return strtoupper(SHA1(sprintf('%s%s%s%s',
             $this->getOrderId(),
             $this->getTerminalId(),
-            $this->getAmountInteger(),
+            $amount,
             $this->getSecurityHash())));
     }
 
     /**
      * @return array
+     * @throws \Omnipay\Common\Exception\InvalidRequestException
      */
     protected function getSalesRequestParams(): array
     {
@@ -298,7 +293,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         $data['Transaction'] = array(
             'Type' => 'sales',
             'InstallmentCnt' => $this->getInstallment(),
-            'Amount' => $this->getAmountInteger(),
+            'Amount' => (int)$this->getAmount(),
             'CurrencyCode' => $this->currency_list[$this->getCurrency()],
             'CardholderPresentCode' => "0",
             'MotoInd' => "N"
@@ -307,11 +302,14 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $data;
     }
 
+
     /**
      * @return array
+     * @throws \Omnipay\Common\Exception\InvalidRequestException
      */
     protected function getCompleteSalesRequestParams(): array
     {
+
         $data = $this->getInfo();
         $data['Order'] = array(
             'OrderID' => $this->getOrderId()
@@ -323,7 +321,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
         $data['Terminal'] = [
             'ProvUserID' => $this->getUserName(),
-            'HashData' => $this->getCompletePurchaseTransactionHash(),
+            'HashData' => $this->getTransactionHashWithoutCardNumber(),
             'UserID' => $this->getUserName(),
             'ID' => $this->getTerminalId(),
             'MerchantID' => $this->getMerchantId()
@@ -331,7 +329,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
         $data['Transaction'] = array(
             'Type' => 'sales',
-            'Amount' => $this->getAmountInteger(),
+            'Amount' => (int)$this->getAmount(),
             'CurrencyCode' => $this->currency_list[$this->getCurrency()],
             'MotoInd' => "N"
         );
@@ -341,6 +339,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
     /**
      * @return array
+     * @throws \Omnipay\Common\Exception\InvalidRequestException
      */
     protected function getAuthorizeRequestParams(): array
     {
@@ -366,7 +365,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         $data['Transaction'] = array(
             'Type' => 'preauth',
             'InstallmentCnt' => $this->getInstallment(),
-            'Amount' => $this->getAmountInteger(),
+            'Amount' => (int)$this->getAmount(),
             'CurrencyCode' => $this->currency_list[$this->getCurrency()],
             'CardholderPresentCode' => "0",
             'MotoInd' => "N"
@@ -377,6 +376,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
     /**
      * @return array
+     * @throws \Omnipay\Common\Exception\InvalidRequestException
      */
     protected function getSalesRequestParamsFor3d(): array
     {
@@ -387,7 +387,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         $params['terminalid'] = $this->getTerminalId();
         $params['terminalmerchantid'] = $this->getMerchantId();
         $params['txntype'] = 'sales';
-        $params['txnamount'] = $this->getAmountInteger();
+        $params['txnamount'] = (int)$this->getAmount();
         $params['txncurrencycode'] = $this->currency_list[$this->getCurrency()];
         $params['txninstallmentcount'] = $this->getInstallment();
         $params['customeremailaddress'] = $this->getCard()->getEmail();
