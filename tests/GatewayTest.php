@@ -36,20 +36,19 @@ class GatewayTest extends GatewayTestCase
     {
         $this->options = [
             'card' => $this->getCardInfo(),
-            'orderId' => '8985204111',
-            'amount' => "100",
+            'orderId' => '1085204111',
+            'amount' => "3.50",
             'currency' => 'TRY',
             'returnUrl' => "https://eticaret.garanti.com.tr/destek/postback.aspx",
             'cancelUrl' => "https://eticaret.garanti.com.tr/destek/postback.aspx",
             'installment' => "",
-            'paymentMethod' => '3d',
+            'paymentMethod' => '',
             'clientIp' => '10.241.19.2',
             'secureKey' => '12345678'
         ];
 
         /** @var PurchaseResponse $response */
         $response = $this->gateway->purchase($this->options)->send();
-
         $this->assertTrue($response->isSuccessful());
     }
 

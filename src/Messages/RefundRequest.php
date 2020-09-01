@@ -33,7 +33,7 @@ class RefundRequest extends AbstractRequest
 
         $data['Transaction'] = array(
             'Type' => 'refund',
-            'Amount' => (int)$this->getAmount(),
+            'Amount' => $this->getAmountInteger(),
             'CurrencyCode' => $this->currency_list[$this->getCurrency()]
         );
 
