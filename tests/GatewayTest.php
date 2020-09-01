@@ -31,18 +31,36 @@ class GatewayTest extends GatewayTestCase
         $this->gateway->setPassword('123qweASD/');
     }
 
+    public function testCompletePurchase()
+    {
+        $this->options = [
+            'orderId' => '98976534',
+            'amount' => "10",
+            'currency' => 'TRY',
+            'cavv' => 'jCm0m+u/0hUfAREHBAMBcfN+pSo=',
+            'eci' => '02',
+            'xid' => 'RszfrwEYe/8xb7rnrPuh6C9pZSQ=',
+            'md' => 'G1YfkxEZ8Noemg4MRspO20vEiXaEk51APnDVEz+WRaZCdQ8gq+3XJRSTiNWDuZUhrvpkP7r3mk+BGumU6GL2XP/NFyczbI+2dQi8uS/etyI0QcvcFd2NGhLBsDNYfOwILnzLqvoyienmWkZy1a5I/w==',
+            'mdStatus' => '1',
+            'clientIp' => '10.241.19.2'
+        ];
+
+        /** @var CompletePurchaseResponse $response */
+        $response = $this->gateway->completePurchase($this->options)->send();
+        $this->assertTrue($response->isSuccessful());
+    }
 
     public function testPurchase()
     {
         $this->options = [
             'card' => $this->getCardInfo(),
-            'orderId' => '1085204111',
-            'amount' => "3.50",
+            'orderId' => '98976534',
+            'amount' => "10",
             'currency' => 'TRY',
             'returnUrl' => "https://eticaret.garanti.com.tr/destek/postback.aspx",
             'cancelUrl' => "https://eticaret.garanti.com.tr/destek/postback.aspx",
             'installment' => "",
-            'paymentMethod' => '',
+            'paymentMethod' => '3d',
             'clientIp' => '10.241.19.2',
             'secureKey' => '12345678'
         ];
@@ -52,25 +70,6 @@ class GatewayTest extends GatewayTestCase
         $this->assertTrue($response->isSuccessful());
     }
 
-
-    public function testCompletePurchase()
-    {
-        $this->options = [
-            'orderId' => '424569',
-            'amount' => "3",
-            'currency' => 'TRY',
-            'cavv' => 'jCm0m+u/0hUfAREHBAMBcfN+pSo=',
-            'eci' => '02',
-            'xid' => 'RszfrwEYe/8xb7rnrPuh6C9pZSQ=',
-            'md' => 'SbEsOKX7ObDWDySsIxdAWk+S+OBRqtO9JhbzBb2vwcwJ7nw4PmXWPaXT2zLq3Mz4hAI7F3GTIgCh4F8EC2l0LMYOr9yaA8G0yq3hudtek3FZtMRuxD29rUwF3a10zd3fQI/tSTSHkMdiT5kjKRC4Eg==',
-            'mdStatus' => '1',
-            'clientIp' => '172.18.0.1'
-        ];
-
-        /** @var CompletePurchaseResponse $response */
-        $response = $this->gateway->completePurchase($this->options)->send();
-        $this->assertTrue($response->isSuccessful());
-    }
 
     public function testCapture()
     {
