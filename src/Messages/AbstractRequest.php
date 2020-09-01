@@ -247,9 +247,10 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
      */
     protected function getTransactionHashWithoutCardNumber(): string
     {
-        return strtoupper(SHA1(sprintf('%s%s%s%s',
+        return strtoupper(SHA1(sprintf('%s%s%s%s%s',
             $this->getOrderId(),
             $this->getTerminalId(),
+            null,
             $this->getAmountInteger(),
             $this->getSecurityHash())));
     }
@@ -299,7 +300,6 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
     /**
      * @return array
-     * @throws \Omnipay\Common\Exception\InvalidRequestException
      */
     protected function getCompleteSalesRequestParams(): array
     {
@@ -373,6 +373,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
      */
     protected function getSalesRequestParamsFor3d(): array
     {
+        $expiryYear = \DateTime::createFromFormat('Y', $this->getCard()->getExpiryYear());
         $params['apiversion'] = $this->version;
         $params['mode'] = $this->getTestMode() ? 'TEST' : 'PROD';
         $params['terminalprovuserid'] = $this->getUserName();
@@ -392,8 +393,8 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         $params['txntimestamp'] = date("d/m/Y H:i:s");
         $params['refreshtime'] = 5;
         $params['cardnumber'] = $this->getCard()->getNumber();
-        $params['cardexpiredatemonth'] = $this->getCard()->getExpiryMonth();
-        $params['cardexpiredateyear'] = $this->getCard()->getExpiryYear();
+        $params['cardexpiredatemonth'] = sprintf("%02d", (string)$this->getCard()->getExpiryMonth());
+        $params['cardexpiredateyear'] = $expiryYear->format('y');
         $params['cardcvv2'] = $this->getCard()->getCvv();
         $params['secure3dsecuritylevel'] = '3D';
 
