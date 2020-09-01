@@ -34,7 +34,7 @@ class VoidRequest extends AbstractRequest
         $data['Transaction'] = array(
             'Type' => 'void',
             'InstallmentCnt' => $this->getInstallment(),
-            'Amount' => $this->getAmountInteger(),
+            'Amount' => (int)$this->getAmount(),
             'CurrencyCode' => $this->currency_list[$this->getCurrency()],
             'CardholderPresentCode' => "0",
             'MotoInd' => "N"
