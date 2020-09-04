@@ -19,21 +19,19 @@ class VoidRequest extends AbstractRequest
         $data['Mode'] = $this->getTestMode() ? 'TEST' : 'PROD';
         $data['Terminal'] = [
             'ProvUserID' => $this->getUserName(),
-            'HashData' => $this->getTransactionHashWithoutCardNumber(),
+            'HashData' => $this->getTransactionHashRefundAndCancel(),
             'UserID' => $this->getUserName(),
             'ID' => $this->getTerminalId(),
             'MerchantID' => $this->getMerchantId()
         ];
         $data['Customer'] = array(
-            'IPAddress' => $this->getClientIp(),
-            'EmailAddress' => $this->getCard()->getEmail()
+            'IPAddress' => $this->getClientIp()
         );
         $data['Order'] = array(
             'OrderID' => $this->getOrderId()
         );
         $data['Transaction'] = array(
             'Type' => 'void',
-            'InstallmentCnt' => $this->getInstallment(),
             'Amount' => $this->getAmountInteger(),
             'CurrencyCode' => $this->currency_list[$this->getCurrency()],
             'CardholderPresentCode' => "0",
