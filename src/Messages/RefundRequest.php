@@ -18,9 +18,9 @@ class RefundRequest extends AbstractRequest
         $data['Version'] = $this->version;
         $data['Mode'] = $this->getTestMode() ? 'TEST' : 'PROD';
         $data['Terminal'] = [
-            'ProvUserID' => $this->getUserName(),
+            'ProvUserID' => self::USERNAME_RFN,
             'HashData' => $this->getTransactionHashRefundAndCancel(),
-            'UserID' => $this->getUserName(),
+            'UserID' => self::USERNAME_RFN,
             'ID' => $this->getTerminalId(),
             'MerchantID' => $this->getMerchantId()
         ];

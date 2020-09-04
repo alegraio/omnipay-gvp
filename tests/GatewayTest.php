@@ -27,7 +27,6 @@ class GatewayTest extends GatewayTestCase
         $this->gateway->setMerchantId('7000679');
         $this->gateway->setTerminalId('30691297');
         $this->gateway->setTestMode(true);
-        $this->gateway->setUserName('PROVAUT'); //PROVRFN
         $this->gateway->setPassword('123qweASD/');
     }
 

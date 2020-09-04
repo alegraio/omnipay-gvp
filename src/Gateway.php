@@ -73,23 +73,6 @@ class Gateway extends AbstractGateway
     /**
      * @return string
      */
-    public function getUserName(): string
-    {
-        return $this->getParameter('username');
-    }
-
-    /**
-     * @param string $value
-     * @return Gateway
-     */
-    public function setUserName(string $value): Gateway
-    {
-        return $this->setParameter('username', $value);
-    }
-
-    /**
-     * @return string
-     */
     public function getPassword(): string
     {
         return $this->getParameter('password');
