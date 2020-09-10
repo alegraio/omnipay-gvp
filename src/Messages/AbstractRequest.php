@@ -11,6 +11,12 @@ use Omnipay\Common\Message\ResponseInterface;
 abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 {
     /** @var string */
+    protected const USERNAME_AUT = 'PROVAUT';
+
+    /** @var string */
+    protected const USERNAME_RFN = 'PROVRFN';
+
+    /** @var string */
     protected $version = 'v0.01';
 
     /** @var array */
@@ -70,23 +76,6 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     public function setTerminalId(string $value): AbstractRequest
     {
         return $this->setParameter('terminalId', $value);
-    }
-
-    /**
-     * @return string
-     */
-    public function getUserName(): string
-    {
-        return $this->getParameter('username');
-    }
-
-    /**
-     * @param string $value
-     * @return AbstractRequest
-     */
-    public function setUserName(string $value): AbstractRequest
-    {
-        return $this->setParameter('username', $value);
     }
 
     /**
@@ -290,9 +279,9 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         );
 
         $data['Terminal'] = [
-            'ProvUserID' => $this->getUserName(),
+            'ProvUserID' => self::USERNAME_AUT,
             'HashData' => $this->getTransactionHash(),
-            'UserID' => $this->getUserName(),
+            'UserID' => self::USERNAME_AUT,
             'ID' => $this->getTerminalId(),
             'MerchantID' => $this->getMerchantId()
         ];
@@ -326,9 +315,9 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         );
 
         $data['Terminal'] = [
-            'ProvUserID' => $this->getUserName(),
+            'ProvUserID' => self::USERNAME_AUT,
             'HashData' => $this->getTransactionHashWithoutCardNumber(),
-            'UserID' => $this->getUserName(),
+            'UserID' => self::USERNAME_AUT,
             'ID' => $this->getTerminalId(),
             'MerchantID' => $this->getMerchantId()
         ];
@@ -350,9 +339,9 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     {
         $data = $this->getInfo();
         $data['Terminal'] = [
-            'ProvUserID' => $this->getUserName(),
+            'ProvUserID' => self::USERNAME_AUT,
             'HashData' => $this->getTransactionHash(),
-            'UserID' => $this->getUserName(),
+            'UserID' => self::USERNAME_AUT,
             'ID' => $this->getTerminalId(),
             'MerchantID' => $this->getMerchantId()
         ];
@@ -388,8 +377,8 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         $expiryYear = \DateTime::createFromFormat('Y', $this->getCard()->getExpiryYear());
         $params['apiversion'] = $this->version;
         $params['mode'] = $this->getTestMode() ? 'TEST' : 'PROD';
-        $params['terminalprovuserid'] = $this->getUserName();
-        $params['terminaluserid'] = $this->getUserName();
+        $params['terminalprovuserid'] = self::USERNAME_AUT;
+        $params['terminaluserid'] = self::USERNAME_AUT;
         $params['terminalid'] = $this->getTerminalId();
         $params['terminalmerchantid'] = $this->getMerchantId();
         $params['txntype'] = 'sales';
