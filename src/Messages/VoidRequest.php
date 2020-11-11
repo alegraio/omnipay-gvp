@@ -48,6 +48,9 @@ class VoidRequest extends AbstractRequest
      */
     protected function createResponse($data): VoidResponse
     {
-        return new VoidResponse($this, $data);
+        $response = new VoidResponse($this, $data);
+        $response->setServiceRequestParams($data);
+
+        return $response;
     }
 }
