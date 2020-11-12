@@ -405,6 +405,18 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $params;
     }
 
+    /**
+     * @return array
+     */
+    protected function getRequestParams(): array
+    {
+        return [
+            'url' => $this->getEndPoint(),
+            'data' => $this->getData(),
+            'method' => $this->getHttpMethod()
+        ];
+    }
+
     private function getSecurityHash(): string
     {
         $tidPrefix = str_repeat('0', 9 - strlen($this->getTerminalId()));

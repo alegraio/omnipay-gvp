@@ -22,7 +22,8 @@ class AuthorizeRequest extends AbstractRequest
     protected function createResponse($data): AuthorizeResponse
     {
         $response = new AuthorizeResponse($this, $data);
-        $response->setServiceRequestParams($data);
+        $requestParams = $this->getRequestParams();
+        $response->setServiceRequestParams($requestParams);
 
         return $response;
     }
