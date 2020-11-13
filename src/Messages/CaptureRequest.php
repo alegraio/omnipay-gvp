@@ -25,7 +25,11 @@ class CaptureRequest extends AbstractRequest
      */
     protected function createResponse($data): CaptureResponse
     {
-        return new CaptureResponse($this, $data);
+        $response = new CaptureResponse($this, $data);
+        $requestParams = $this->getRequestParams();
+        $response->setServiceRequestParams($requestParams);
+
+        return $response;
     }
 }
 

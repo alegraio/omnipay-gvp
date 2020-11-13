@@ -10,6 +10,9 @@ use Omnipay\Common\Message\RequestInterface;
 
 abstract class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse implements RedirectResponseInterface
 {
+    /** @var array */
+    public $serviceRequestParams;
+
     /** @var bool */
     public $isRedirect = false;
 
@@ -101,5 +104,21 @@ abstract class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse
         }
 
         return parent::getTransactionReference();
+    }
+
+    /**
+     * @return array
+     */
+    public function getServiceRequestParams(): array
+    {
+        return $this->serviceRequestParams;
+    }
+
+    /**
+     * @param array $serviceRequestParams
+     */
+    public function setServiceRequestParams(array $serviceRequestParams): void
+    {
+        $this->serviceRequestParams = $serviceRequestParams;
     }
 }

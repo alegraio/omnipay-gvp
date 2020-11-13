@@ -124,6 +124,10 @@ class CompletePurchaseRequest extends AbstractRequest
      */
     protected function createResponse($data): CompletePurchaseResponse
     {
-        return new CompletePurchaseResponse($this, $data);
+        $response = new CompletePurchaseResponse($this, $data);
+        $requestParams = $this->getRequestParams();
+        $response->setServiceRequestParams($requestParams);
+
+        return $response;
     }
 }
