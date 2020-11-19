@@ -12,7 +12,10 @@ class AuthorizeRequest extends AbstractRequest
      */
     public function getData(): array
     {
-        return $this->getAuthorizeRequestParams();
+        $data = $this->getAuthorizeRequestParams();
+        $this->setRequestParams($data);
+
+        return $data;
     }
 
     /**
@@ -21,6 +24,22 @@ class AuthorizeRequest extends AbstractRequest
     public function getProcessName(): string
     {
         return self::USERNAME_AUT;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProcessType(): string
+    {
+        return 'preauth';
+    }
+
+    /**
+     * @return array
+     */
+    public function getSensitiveData(): array
+    {
+        return ['Number', 'ExpireDate'];
     }
 
     /**
@@ -35,5 +54,6 @@ class AuthorizeRequest extends AbstractRequest
 
         return $response;
     }
+
 }
 
