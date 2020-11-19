@@ -2,8 +2,6 @@
 
 namespace OmnipayTest\Gvp\Messages;
 
-
-use Omnipay\Gvp\Messages\RefundRequest;
 use Omnipay\Gvp\Messages\VoidRequest;
 
 class VoidRequestTest extends GvpTestCase

@@ -2,7 +2,6 @@
 
 namespace OmnipayTest\Gvp\Messages;
 
-
 use Omnipay\Gvp\Messages\RefundRequest;
 
 class RefundRequestTest extends GvpTestCase

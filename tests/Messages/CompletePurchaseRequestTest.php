@@ -2,7 +2,6 @@
 
 namespace OmnipayTest\Gvp\Messages;
 
-
 use Omnipay\Gvp\Messages\CompletePurchaseRequest;
 
 class CompletePurchaseRequestTest extends GvpTestCase

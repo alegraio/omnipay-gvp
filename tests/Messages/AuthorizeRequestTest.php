@@ -2,7 +2,6 @@
 
 namespace OmnipayTest\Gvp\Messages;
 
-
 use Omnipay\Gvp\Messages\AuthorizeRequest;
 
 class AuthorizeRequestTest extends GvpTestCase
