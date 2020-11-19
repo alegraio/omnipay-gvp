@@ -40,6 +40,14 @@ class RefundRequest extends AbstractRequest
         return $data;
     }
 
+    /**
+     * @return string
+     */
+    public function getProcessName(): string
+    {
+        return self::USERNAME_RFN;
+    }
+
 
     /**
      * @param $data

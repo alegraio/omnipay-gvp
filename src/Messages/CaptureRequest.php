@@ -20,6 +20,14 @@ class CaptureRequest extends AbstractRequest
     }
 
     /**
+     * @return string
+     */
+    public function getProcessName(): string
+    {
+        return self::USERNAME_AUT;
+    }
+
+    /**
      * @param $data
      * @return CaptureResponse
      */

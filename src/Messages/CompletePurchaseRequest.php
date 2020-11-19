@@ -36,6 +36,14 @@ class CompletePurchaseRequest extends AbstractRequest
     /**
      * @return string
      */
+    public function getProcessName(): string
+    {
+        return self::USERNAME_AUT;
+    }
+
+    /**
+     * @return string
+     */
     public function getCavv(): string
     {
         return $this->getParameter('cavv');

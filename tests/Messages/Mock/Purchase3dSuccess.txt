@@ -1,0 +1,61 @@
+HTTP/1.1 200 OK
+Server: nginx
+Date: Fri, 11 Nov 2020 18:25:28 GMT
+Content-Type: application/json;charset=utf-8
+Content-Length: 2966
+Connection: keep-alive
+Cache-Control: no-cache, no-store
+Request-Id: req_8PDHeZazN2LwML
+Access-Control-Allow-Credentials: true
+Access-Control-Max-Age: 300
+
+{
+  ["apiversion"]=>
+  string(5) "v0.01"
+  ["mode"]=>
+  string(4) "TEST"
+  ["terminalprovuserid"]=>
+  string(7) "PROVAUT"
+  ["terminaluserid"]=>
+  string(7) "PROVAUT"
+  ["terminalid"]=>
+  string(8) "30691297"
+  ["terminalmerchantid"]=>
+  string(7) "7000679"
+  ["txntype"]=>
+  string(5) "sales"
+  ["txnamount"]=>
+  int(50000)
+  ["txncurrencycode"]=>
+  int(949)
+  ["txninstallmentcount"]=>
+  string(0) ""
+  ["customeremailaddress"]=>
+  string(20) "test@garanti.com.tr"
+  ["customeripaddress"]=>
+  string(11) "10.241.19.2"
+  ["orderid"]=>
+  string(10) "9809896rew"
+  ["successurl"]=>
+  string(52) "https://eticaret.garanti.com.tr/destek/postback.aspx"
+  ["errorurl"]=>
+  string(52) "https://eticaret.garanti.com.tr/destek/postback.aspx"
+  ["lang"]=>
+  string(2) "tr"
+  ["txntimestamp"]=>
+  string(19) "19/11/2020 11:37:16"
+  ["refreshtime"]=>
+  int(5)
+  ["cardnumber"]=>
+  string(16) "5406697543211173"
+  ["cardexpiredatemonth"]=>
+  string(2) "03"
+  ["cardexpiredateyear"]=>
+  string(2) "23"
+  ["cardcvv2"]=>
+  string(3) "465"
+  ["secure3dsecuritylevel"]=>
+  string(2) "3D"
+  ["secure3dhash"]=>
+  string(40) "B829B2EC28DFB4909B59A138F00E750057FA53FF"
+}

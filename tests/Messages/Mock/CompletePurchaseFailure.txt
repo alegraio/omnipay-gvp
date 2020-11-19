@@ -1,0 +1,54 @@
+HTTP/1.1 200 OK
+Server: nginx
+Date: Fri, 11 Nov 2020 18:25:28 GMT
+Content-Type: application/json;charset=utf-8
+Content-Length: 2966
+Connection: keep-alive
+Cache-Control: no-cache, no-store
+Request-Id: req_8PDHeZazN2LwML
+Access-Control-Allow-Credentials: true
+Access-Control-Max-Age: 300
+
+<?xml version="1.0"?>
+<GVPSResponse>
+	<Mode></Mode>
+	<Terminal>
+		<ProvUserID>PROVAUT</ProvUserID>
+		<UserID>PROVAUT</UserID>
+		<ID>30691297</ID>
+		<MerchantID>7000679</MerchantID>
+	</Terminal>
+	<Customer>
+		<IPAddress>10.241.19.2</IPAddress>
+		<EmailAddress>test@garanti.com.tr</EmailAddress>
+	</Customer>
+	<Order>
+		<OrderID>9809896rew</OrderID>
+		<GroupID></GroupID>
+	</Order>
+	<Transaction>
+		<Response>
+			<Source>GVPS</Source>
+			<Code>92</Code>
+			<ReasonCode>0104</ReasonCode>
+			<Message>Declined</Message>
+			<ErrorMsg>Aynı sipariş içinde sadece bir tane satış işlemi yapılabilir</ErrorMsg>
+			<SysErrMsg>ErrorId: 0104</SysErrMsg>
+		</Response>
+		<RetrefNum></RetrefNum>
+		<AuthCode></AuthCode>
+		<BatchNum></BatchNum>
+		<SequenceNum></SequenceNum>
+		<ProvDate>20201119 14:21:16</ProvDate>
+		<CardNumberMasked>540669******1173</CardNumberMasked>
+		<CardHolderName></CardHolderName>
+		<CardType></CardType>
+		<HashData>08654996394322434C3FB17DC04D4A6DA36F933E</HashData>
+		<HostMsgList></HostMsgList>
+		<RewardInqResult>
+			<RewardList></RewardList>
+			<ChequeList></ChequeList>
+		</RewardInqResult>
+		<GarantiCardInd>Y</GarantiCardInd>
+	</Transaction>
+</GVPSResponse>
