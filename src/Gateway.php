@@ -105,6 +105,20 @@ class Gateway extends AbstractGateway
     }
 
     /**
+     * Default parameters.
+     *
+     * @return array
+     */
+    public function getDefaultParameters(): array
+    {
+        return [
+            'merchantId' => '',
+            'terminalId' => '',
+            'password' => ''
+        ];
+    }
+
+    /**
      * @param array $parameters
      * @return AbstractRequest|RequestInterface
      */

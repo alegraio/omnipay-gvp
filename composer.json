@@ -9,6 +9,11 @@
       "Omnipay\\Gvp\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "OmnipayTest\\Gvp\\": "tests/"
+    }
+  },
   "require": {
     "php": "^7.3",
     "omnipay/common": "^3",

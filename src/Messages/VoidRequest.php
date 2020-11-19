@@ -15,30 +15,37 @@ class VoidRequest extends AbstractRequest
      */
     public function getData(): array
     {
-        $data['Version'] = $this->version;
-        $data['Mode'] = $this->getTestMode() ? 'TEST' : 'PROD';
-        $data['Terminal'] = [
-            'ProvUserID' => self::USERNAME_RFN,
-            'HashData' => $this->getTransactionHashRefundAndCancel(),
-            'UserID' => self::USERNAME_RFN,
-            'ID' => $this->getTerminalId(),
-            'MerchantID' => $this->getMerchantId()
-        ];
-        $data['Customer'] = array(
-            'IPAddress' => $this->getClientIp()
-        );
-        $data['Order'] = array(
-            'OrderID' => $this->getOrderId()
-        );
-        $data['Transaction'] = array(
-            'Type' => 'void',
-            'Amount' => $this->getAmountInteger(),
-            'CurrencyCode' => $this->currency_list[$this->getCurrency()],
-            'CardholderPresentCode' => "0",
-            'MotoInd' => "N"
-        );
+        $data = $this->getRefundRequestParams();
+        $data['Transaction']['CardholderPresentCode'] = '0';
+        $data['Transaction']['MotoInd'] = 'N';
+
+        $this->setRequestParams($data);
 
         return $data;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProcessName(): string
+    {
+        return self::USERNAME_RFN;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProcessType(): string
+    {
+        return 'void';
+    }
+
+    /**
+     * @return array
+     */
+    public function getSensitiveData(): array
+    {
+        return [];
     }
 
 

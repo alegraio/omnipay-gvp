@@ -15,29 +15,34 @@ class RefundRequest extends AbstractRequest
      */
     public function getData(): array
     {
-        $data['Version'] = $this->version;
-        $data['Mode'] = $this->getTestMode() ? 'TEST' : 'PROD';
-        $data['Terminal'] = [
-            'ProvUserID' => self::USERNAME_RFN,
-            'HashData' => $this->getTransactionHashRefundAndCancel(),
-            'UserID' => self::USERNAME_RFN,
-            'ID' => $this->getTerminalId(),
-            'MerchantID' => $this->getMerchantId()
-        ];
-        $data['Customer'] = array(
-            'IPAddress' => $this->getClientIp()
-        );
-        $data['Order'] = array(
-            'OrderID' => $this->getOrderId()
-        );
-
-        $data['Transaction'] = array(
-            'Type' => 'refund',
-            'Amount' => $this->getAmountInteger(),
-            'CurrencyCode' => $this->currency_list[$this->getCurrency()]
-        );
+        $data = $this->getRefundRequestParams();
+        $this->setRequestParams($data);
 
         return $data;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProcessName(): string
+    {
+        return self::USERNAME_RFN;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProcessType(): string
+    {
+        return 'refund';
+    }
+
+    /**
+     * @return array
+     */
+    public function getSensitiveData(): array
+    {
+        return [];
     }
 
 

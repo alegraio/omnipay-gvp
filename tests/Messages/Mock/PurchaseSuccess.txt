@@ -1,0 +1,54 @@
+HTTP/1.1 200 OK
+Server: nginx
+Date: Fri, 11 Nov 2020 18:25:28 GMT
+Content-Type: application/json;charset=utf-8
+Content-Length: 2966
+Connection: keep-alive
+Cache-Control: no-cache, no-store
+Request-Id: req_8PDHeZazN2LwML
+Access-Control-Allow-Credentials: true
+Access-Control-Max-Age: 300
+
+<?xml version="1.0"?>
+<GVPSResponse>
+	<Mode></Mode>
+	<Terminal>
+		<ProvUserID>PROVAUT</ProvUserID>
+		<UserID>PROVAUT</UserID>
+		<ID>30691297</ID>
+		<MerchantID>7000679</MerchantID>
+	</Terminal>
+	<Customer>
+		<IPAddress>10.241.19.2</IPAddress>
+		<EmailAddress>test@garanti.com.tr</EmailAddress>
+	</Customer>
+	<Order>
+		<OrderID>4354353454</OrderID>
+		<GroupID></GroupID>
+	</Order>
+	<Transaction>
+		<Response>
+			<Source>HOST</Source>
+			<Code>00</Code>
+			<ReasonCode>00</ReasonCode>
+			<Message>Approved</Message>
+			<ErrorMsg></ErrorMsg>
+			<SysErrMsg></SysErrMsg>
+		</Response>
+		<RetrefNum>032402285120</RetrefNum>
+		<AuthCode>274579</AuthCode>
+		<BatchNum>003536</BatchNum>
+		<SequenceNum>000062</SequenceNum>
+		<ProvDate>20201119 13:53:05</ProvDate>
+		<CardNumberMasked>540669******1173</CardNumberMasked>
+		<CardHolderName>4517******* 4517**********</CardHolderName>
+		<CardType>BONUS</CardType>
+		<HashData>29A2F838877CB99F70F382FD39D07DE6186E0339</HashData>
+		<HostMsgList></HostMsgList>
+		<RewardInqResult>
+			<RewardList></RewardList>
+			<ChequeList></ChequeList>
+		</RewardInqResult>
+		<GarantiCardInd>Y</GarantiCardInd>
+	</Transaction>
+</GVPSResponse>

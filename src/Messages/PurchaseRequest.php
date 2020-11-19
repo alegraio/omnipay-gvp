@@ -18,10 +18,38 @@ class PurchaseRequest extends AbstractRequest
     public function getData()
     {
         if ($this->getPaymentMethod() === self::PAYMENT_TYPE_3D) {
-            return $this->getSalesRequestParamsFor3d();
+            $data = $this->getSalesRequestParamsFor3d();
+        } else {
+            $data = $this->getSalesRequestParams();
         }
 
-        return $this->getSalesRequestParams();
+        $this->setRequestParams($data);
+
+        return $data;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProcessName(): string
+    {
+        return self::USERNAME_AUT;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProcessType(): string
+    {
+        return 'sales';
+    }
+
+    /**
+     * @return array
+     */
+    public function getSensitiveData(): array
+    {
+        return ['Number', 'CVV2', 'ExpireDate', 'cardnumber', 'cardexpiredatemonth', 'cardexpiredateyear', 'cardcvv2'];
     }
 
     /**

@@ -7,8 +7,10 @@ namespace Omnipay\Gvp\Messages;
 
 use Omnipay\Common\Exception\InvalidResponseException;
 use Omnipay\Common\Message\ResponseInterface;
+use Omnipay\Gvp\Mask;
+use Omnipay\Gvp\RequestInterface;
 
-abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
+abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest implements RequestInterface
 {
     /** @var string */
     protected const USERNAME_AUT = 'PROVAUT';
@@ -35,6 +37,8 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         'GBP' => 826,
         'JPY' => 392
     ];
+
+    protected $requestParams;
 
     /**
      * @return string
@@ -256,44 +260,44 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
             $this->getSecurityHash())));
     }
 
+
     /**
      * @return array
-     * @throws \Omnipay\Common\Exception\InvalidRequestException
      */
     protected function getSalesRequestParams(): array
     {
         $data = $this->getInfo();
-        $data['Card'] = array(
+        $data['Card'] = [
             'Number' => $this->getCard()->getNumber(),
             'ExpireDate' => $this->getCard()->getExpiryDate('my'),
             'CVV2' => $this->getCard()->getCvv()
-        );
+        ];
 
-        $data['Order'] = array(
+        $data['Order'] = [
             'OrderID' => $this->getOrderId()
-        );
+        ];
 
-        $data['Customer'] = array(
+        $data['Customer'] = [
             'IPAddress' => $this->getClientIp(),
             'EmailAddress' => $this->getCard()->getEmail()
-        );
+        ];
 
         $data['Terminal'] = [
-            'ProvUserID' => self::USERNAME_AUT,
+            'ProvUserID' => $this->getProcessName(),
             'HashData' => $this->getTransactionHash(),
-            'UserID' => self::USERNAME_AUT,
+            'UserID' => $this->getProcessName(),
             'ID' => $this->getTerminalId(),
             'MerchantID' => $this->getMerchantId()
         ];
 
-        $data['Transaction'] = array(
-            'Type' => 'sales',
+        $data['Transaction'] = [
+            'Type' => $this->getProcessType(),
             'InstallmentCnt' => $this->getInstallment(),
             'Amount' => $this->getAmountInteger(),
             'CurrencyCode' => $this->currency_list[$this->getCurrency()],
-            'CardholderPresentCode' => "0",
-            'MotoInd' => "N"
-        );
+            'CardholderPresentCode' => '0',
+            'MotoInd' => 'N'
+        ];
 
         return $data;
     }
@@ -306,28 +310,28 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     {
 
         $data = $this->getInfo();
-        $data['Order'] = array(
+        $data['Order'] = [
             'OrderID' => $this->getOrderId()
-        );
+        ];
 
-        $data['Customer'] = array(
+        $data['Customer'] = [
             'IPAddress' => $this->getClientIp(),
-        );
+        ];
 
         $data['Terminal'] = [
-            'ProvUserID' => self::USERNAME_AUT,
+            'ProvUserID' => $this->getProcessName(),
             'HashData' => $this->getTransactionHashWithoutCardNumber(),
-            'UserID' => self::USERNAME_AUT,
+            'UserID' => $this->getProcessName(),
             'ID' => $this->getTerminalId(),
             'MerchantID' => $this->getMerchantId()
         ];
 
-        $data['Transaction'] = array(
-            'Type' => 'sales',
+        $data['Transaction'] = [
+            'Type' => $this->getProcessType(),
             'Amount' => $this->getAmountInteger(),
             'CurrencyCode' => $this->currency_list[$this->getCurrency()],
-            'MotoInd' => "N"
-        );
+            'MotoInd' => 'N'
+        ];
 
         return $data;
     }
@@ -339,46 +343,48 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     {
         $data = $this->getInfo();
         $data['Terminal'] = [
-            'ProvUserID' => self::USERNAME_AUT,
+            'ProvUserID' => $this->getProcessName(),
             'HashData' => $this->getTransactionHash(),
-            'UserID' => self::USERNAME_AUT,
+            'UserID' => $this->getProcessName(),
             'ID' => $this->getTerminalId(),
             'MerchantID' => $this->getMerchantId()
         ];
-        $data['Customer'] = array(
+        $data['Customer'] = [
             'IPAddress' => $this->getClientIp(),
             'EmailAddress' => $this->getCard()->getEmail()
-        );
-        $data['Card'] = array(
+        ];
+
+        $data['Card'] = [
             'Number' => $this->getCard()->getNumber(),
             'ExpireDate' => $this->getCard()->getExpiryDate('my')
-        );
-        $data['Order'] = array(
+        ];
+
+        $data['Order'] = [
             'OrderID' => $this->getOrderId()
-        );
-        $data['Transaction'] = array(
-            'Type' => 'preauth',
+        ];
+
+        $data['Transaction'] = [
+            'Type' => $this->getProcessType(),
             'InstallmentCnt' => $this->getInstallment(),
             'Amount' => $this->getAmountInteger(),
             'CurrencyCode' => $this->currency_list[$this->getCurrency()],
-            'CardholderPresentCode' => "0",
-            'MotoInd' => "N"
-        );
+            'CardholderPresentCode' => '0',
+            'MotoInd' => 'N'
+        ];
 
         return $data;
     }
 
     /**
      * @return array
-     * @throws \Omnipay\Common\Exception\InvalidRequestException
      */
     protected function getSalesRequestParamsFor3d(): array
     {
         $expiryYear = \DateTime::createFromFormat('Y', $this->getCard()->getExpiryYear());
         $params['apiversion'] = $this->version;
         $params['mode'] = $this->getTestMode() ? 'TEST' : 'PROD';
-        $params['terminalprovuserid'] = self::USERNAME_AUT;
-        $params['terminaluserid'] = self::USERNAME_AUT;
+        $params['terminalprovuserid'] = $this->getProcessName();
+        $params['terminaluserid'] = $this->getProcessName();
         $params['terminalid'] = $this->getTerminalId();
         $params['terminalmerchantid'] = $this->getMerchantId();
         $params['txntype'] = 'sales';
@@ -408,11 +414,59 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     /**
      * @return array
      */
+    protected function getRefundRequestParams(): array
+    {
+        $data = $this->getInfo();
+        $data['Terminal'] = [
+            'ProvUserID' => $this->getProcessName(),
+            'HashData' => $this->getTransactionHashRefundAndCancel(),
+            'UserID' => $this->getProcessName(),
+            'ID' => $this->getTerminalId(),
+            'MerchantID' => $this->getMerchantId()
+        ];
+
+        $data['Customer'] = [
+            'IPAddress' => $this->getClientIp()
+        ];
+
+        $data['Order'] = [
+            'OrderID' => $this->getOrderId()
+        ];
+
+        $data['Transaction'] = [
+            'Type' => $this->getProcessType(),
+            'Amount' => $this->getAmountInteger(),
+            'CurrencyCode' => $this->currency_list[$this->getCurrency()]
+        ];
+
+        return $data;
+    }
+
+    protected function setRequestParams(array $data): void
+    {
+        array_walk_recursive($data, [$this, 'updateValue']);
+        $this->requestParams = $data;
+    }
+
+    protected function updateValue(&$data, $key): void
+    {
+        $sensitiveData = $this->getSensitiveData();
+
+        if (\in_array($key, $sensitiveData, true)) {
+            $data = Mask::mask($data);
+        }
+
+    }
+
+    /**
+     * @return array
+     */
     protected function getRequestParams(): array
     {
         return [
             'url' => $this->getEndPoint(),
-            'data' => $this->getData(),
+            'type' => $this->getProcessType(),
+            'data' => $this->requestParams,
             'method' => $this->getHttpMethod()
         ];
     }
@@ -428,7 +482,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     /**
      * @return array
      */
-    private function getInfo(): array
+    protected function getInfo(): array
     {
         $data['Version'] = $this->version;
         $data['Mode'] = $this->getTestMode() ? 'TEST' : 'PROD';

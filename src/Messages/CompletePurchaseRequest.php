@@ -21,16 +21,25 @@ class CompletePurchaseRequest extends AbstractRequest
         }
 
         $data = $this->getCompleteSalesRequestParams();
-        $data['Transaction']['CardholderPresentCode'] = "13";
+        $data['Transaction']['CardholderPresentCode'] = '13';
         $secure3d = [
-            "AuthenticationCode" => $this->getCavv(),
-            "SecurityLevel" => $this->getEci(),
-            "TxnID" => $this->getXid(),
-            "Md" => $this->getMd(),
+            'AuthenticationCode' => $this->getCavv(),
+            'SecurityLevel' => $this->getEci(),
+            'TxnID' => $this->getXid(),
+            'Md' => $this->getMd(),
         ];
         $data['Transaction']['Secure3D'] = $secure3d;
+        $this->setRequestParams($data);
 
         return $data;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProcessName(): string
+    {
+        return self::USERNAME_AUT;
     }
 
     /**
@@ -116,6 +125,22 @@ class CompletePurchaseRequest extends AbstractRequest
     public function setMdStatus(string $value): CompletePurchaseRequest
     {
         return $this->setParameter('mdStatus', $value);
+    }
+
+    /**
+     * @return string
+     */
+    public function getProcessType(): string
+    {
+        return 'sales';
+    }
+
+    /**
+     * @return array
+     */
+    public function getSensitiveData(): array
+    {
+        return [];
     }
 
     /**
