@@ -1,6 +1,6 @@
 <?php
 
-namespace OmnipayTest\gvp;
+namespace OmnipayTest\Gvp;
 
 use Omnipay\Gvp\Gateway;
 
