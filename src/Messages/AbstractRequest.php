@@ -380,6 +380,11 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest i
      */
     protected function getSalesRequestParamsFor3d(): array
     {
+        $installment = $this->getInstallment() ?? '';
+        if ((int)$installment < 2) {
+            $installment = '';
+        }
+
         $expiryYear = \DateTime::createFromFormat('Y', $this->getCard()->getExpiryYear());
         $params['apiversion'] = $this->version;
         $params['mode'] = $this->getTestMode() ? 'TEST' : 'PROD';
@@ -390,7 +395,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest i
         $params['txntype'] = 'sales';
         $params['txnamount'] = $this->getAmountInteger();
         $params['txncurrencycode'] = $this->currency_list[$this->getCurrency()];
-        $params['txninstallmentcount'] = $this->getInstallment();
+        $params['txninstallmentcount'] = $installment;
         $params['customeremailaddress'] = $this->getCard()->getEmail();
         $params['customeripaddress'] = $this->getClientIp();
         $params['orderid'] = $this->getOrderId();
@@ -405,7 +410,20 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest i
         $params['cardcvv2'] = $this->getCard()->getCvv();
         $params['secure3dsecuritylevel'] = '3D';
 
-        $hashData = strtoupper(sha1($this->getTerminalId() . $params['orderid'] . $params['txnamount'] . $params['successurl'] . $params['errorurl'] . $params['txntype'] . $params['txninstallmentcount'] . $this->getSecureKey() . $this->getSecurityHash()));
+        $hashContent = '';
+        $hashContent .= $this->getTerminalId();
+        $hashContent .= $params['orderid'];
+        $hashContent .= $params['txnamount'];
+        $hashContent .= $params['successurl'];
+        $hashContent .= $params['errorurl'];
+        $hashContent .= $params['txntype'];
+        $hashContent .= $params['txninstallmentcount'];
+        $hashContent .= $this->getSecureKey();
+        $hashContent .= $this->getSecurityHash();
+
+
+
+        $hashData = strtoupper(sha1($hashContent));
         $params['secure3dhash'] = $hashData;
 
         return $params;
